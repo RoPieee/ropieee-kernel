@@ -1,0 +1,43 @@
+--- linux-a196d989ba49520382594a6384206f71cc8c008b/sound/usb/quirks.c	2017-04-03 01:23:45.000000000 +0200
++++ ../src/linux-a196d989ba49520382594a6384206f71cc8c008b/sound/usb/quirks.c	2017-04-06 21:05:38.000000000 +0200
+@@ -1312,22 +1312,40 @@
+ 
+ 	/* XMOS based USB DACs */
+ 	switch (chip->usb_id) {
++	case USB_ID(0x1511, 0x0037): /* AURALiC VEGA */
++	case USB_ID(0x20b1, 0x0002): /* Wyred 4 Sound DAC-2 DSD */
+ 	case USB_ID(0x20b1, 0x3008): /* iFi Audio micro/nano iDSD */
+ 	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
+ 	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
+ 	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
++	case USB_ID(0x2522, 0x0012): /* LH Labs VI DAC Infinity */
++	case USB_ID(0x25ce, 0x001f): /* Mytek Brooklyn DAC */
+ 		if (fp->altsetting == 2)
+ 			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
+ 		break;
+ 
++	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
++	case USB_ID(0x1db5, 0x0003): /* Bryston BDA3 */
+ 	case USB_ID(0x20b1, 0x000a): /* Gustard DAC-X20U */
+ 	case USB_ID(0x20b1, 0x2009): /* DIYINHK DSD DXD 384kHz USB to I2S/DSD */
+ 	case USB_ID(0x20b1, 0x2023): /* JLsounds I2SoverUSB */
+ 	case USB_ID(0x20b1, 0x3023): /* Aune X1S 32BIT/384 DSD DAC */
++	case USB_ID(0x20b1, 0x3036): /* Holo Springs Level 3 R2R DAC */
++	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
++	case USB_ID(0x20b1, 0x302d): /* Unison Research Unico CD Due */
+ 	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
++	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
++	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
++	case USB_ID(0x6b42, 0x0042): /* MSB Technology */
+ 		if (fp->altsetting == 3)
+ 			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
+ 		break;
++
++	/* DACs using LE sample format */
++	case USB_ID(0x16d0, 0x071a): /* Amanero Combo384 */
++		if (fp->altsetting == 2)
++			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
++		break;
+ 	default:
+ 		break;
+ 	}
