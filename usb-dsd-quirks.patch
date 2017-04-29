@@ -1,6 +1,6 @@
---- linux-a196d989ba49520382594a6384206f71cc8c008b/sound/usb/quirks.c	2017-04-03 01:23:45.000000000 +0200
-+++ ../src/linux-a196d989ba49520382594a6384206f71cc8c008b/sound/usb/quirks.c	2017-04-06 21:05:38.000000000 +0200
-@@ -1312,22 +1312,40 @@
+--- linux.org/sound/usb/quirks.c	2017-04-22 21:17:08.000000000 +0200
++++ ../src/linux-15d2d0a726ac4c02802e8861befcfbe966d8554d/sound/usb/quirks.c	2017-04-29 14:30:39.000000000 +0200
+@@ -1344,22 +1344,44 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -16,15 +16,19 @@
  			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
  		break;
  
++	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
 +	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
 +	case USB_ID(0x1db5, 0x0003): /* Bryston BDA3 */
  	case USB_ID(0x20b1, 0x000a): /* Gustard DAC-X20U */
  	case USB_ID(0x20b1, 0x2009): /* DIYINHK DSD DXD 384kHz USB to I2S/DSD */
  	case USB_ID(0x20b1, 0x2023): /* JLsounds I2SoverUSB */
++	case USB_ID(0x20b1, 0x3021): /* Eastern El. MiniMax Tube DAC Supreme */
  	case USB_ID(0x20b1, 0x3023): /* Aune X1S 32BIT/384 DSD DAC */
-+	case USB_ID(0x20b1, 0x3036): /* Holo Springs Level 3 R2R DAC */
-+	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
 +	case USB_ID(0x20b1, 0x302d): /* Unison Research Unico CD Due */
++	case USB_ID(0x20b1, 0x3036): /* Holo Springs Level 3 R2R DAC */
++	case USB_ID(0x20b1, 0x307b): /* CH Precision C1 DAC */
++	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
++	case USB_ID(0x22d9, 0x0426): /* OPPO HA-2 */
  	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
 +	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
 +	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
