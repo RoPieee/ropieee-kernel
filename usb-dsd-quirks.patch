@@ -1,6 +1,6 @@
 --- linux.org/sound/usb/quirks.c	2017-04-22 21:17:08.000000000 +0200
-+++ ../src/linux-15d2d0a726ac4c02802e8861befcfbe966d8554d/sound/usb/quirks.c	2017-04-29 14:30:39.000000000 +0200
-@@ -1344,22 +1344,44 @@
++++ ../src/linux-15d2d0a726ac4c02802e8861befcfbe966d8554d/sound/usb/quirks.c	2017-05-04 18:48:32.000000000 +0200
+@@ -1344,22 +1344,53 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -37,11 +37,20 @@
  			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
  		break;
 +
-+	/* DACs using LE sample format */
-+	case USB_ID(0x16d0, 0x071a): /* Amanero Combo384 */
-+		if (fp->altsetting == 2)
-+			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
-+		break;
++	/* Amanero Combo384 USB interface with native DSD support */
++	case USB_ID(0x16d0, 0x071a):
++		if (fp->altsetting == 2) {
++			switch (chip->dev->descriptor.bcdDevice) {
++			case 0x199:
++				return SNDRV_PCM_FMTBIT_DSD_U32_LE;
++			case 0x19b:
++				return SNDRV_PCM_FMTBIT_DSD_U32_BE;
++			default:
++				break;
++			}
++		}
++                break;
++
  	default:
  		break;
  	}
