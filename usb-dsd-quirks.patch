@@ -1,4 +1,4 @@
---- linux.org/sound/usb/quirks.c	2017-04-22 21:17:08.000000000 +0200
+--- linux.orx/sound/usb/quirks.c	2017-04-22 21:17:08.000000000 +0200
 +++ ../src/linux-15d2d0a726ac4c02802e8861befcfbe966d8554d/sound/usb/quirks.c	2017-05-04 18:48:32.000000000 +0200
 @@ -1344,22 +1344,53 @@
  
