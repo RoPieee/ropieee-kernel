@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=525571c4df4066a61166b4b44cf5d757c2c53f5e
+_commit=a9ad627ed581575df069dbefd4dd5f193be5a11f
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.25
+pkgver=4.9.27
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
