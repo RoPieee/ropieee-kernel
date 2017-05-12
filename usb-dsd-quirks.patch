@@ -1,6 +1,6 @@
---- linux.orx/sound/usb/quirks.c	2017-04-22 21:17:08.000000000 +0200
-+++ ../src/linux-15d2d0a726ac4c02802e8861befcfbe966d8554d/sound/usb/quirks.c	2017-05-04 18:48:32.000000000 +0200
-@@ -1344,22 +1344,53 @@
+--- linux.org/sound/usb/quirks.c	2017-05-09 19:51:42.000000000 +0200
++++ ../src/linux-a9ad627ed581575df069dbefd4dd5f193be5a11f/sound/usb/quirks.c	2017-05-12 09:07:18.000000000 +0200
+@@ -1344,22 +1344,54 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -10,6 +10,7 @@
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
++	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
 +	case USB_ID(0x2522, 0x0012): /* LH Labs VI DAC Infinity */
 +	case USB_ID(0x25ce, 0x001f): /* Mytek Brooklyn DAC */
  		if (fp->altsetting == 2)
