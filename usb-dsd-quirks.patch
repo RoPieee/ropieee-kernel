@@ -1,6 +1,6 @@
 --- linux.org/sound/usb/quirks.c	2017-05-09 19:51:42.000000000 +0200
-+++ ../src/linux-a9ad627ed581575df069dbefd4dd5f193be5a11f/sound/usb/quirks.c	2017-05-12 09:07:18.000000000 +0200
-@@ -1344,22 +1344,54 @@
++++ ../src/linux-a9ad627ed581575df069dbefd4dd5f193be5a11f/sound/usb/quirks.c	2017-05-13 16:53:46.000000000 +0200
+@@ -1344,22 +1344,57 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -19,8 +19,10 @@
  
 +	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
 +	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
++	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
 +	case USB_ID(0x1db5, 0x0003): /* Bryston BDA3 */
  	case USB_ID(0x20b1, 0x000a): /* Gustard DAC-X20U */
++	case USB_ID(0x20b1, 0x2005): /* Denafrips Ares DAC */
  	case USB_ID(0x20b1, 0x2009): /* DIYINHK DSD DXD 384kHz USB to I2S/DSD */
  	case USB_ID(0x20b1, 0x2023): /* JLsounds I2SoverUSB */
 +	case USB_ID(0x20b1, 0x3021): /* Eastern El. MiniMax Tube DAC Supreme */
@@ -30,6 +32,7 @@
 +	case USB_ID(0x20b1, 0x307b): /* CH Precision C1 DAC */
 +	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
 +	case USB_ID(0x22d9, 0x0426): /* OPPO HA-2 */
++	case USB_ID(0x22e1, 0xca01): /* HDTA Serenade DSD */
  	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
 +	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
 +	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
