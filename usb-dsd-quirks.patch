@@ -1,6 +1,6 @@
 --- linux.org/sound/usb/quirks.c	2017-05-09 19:51:42.000000000 +0200
-+++ ../src/linux-1423ac8bfbfb2a9d092b604c676e7a58a5fa3367/sound/usb/quirks.c	2017-05-21 19:52:21.000000000 +0200
-@@ -1344,22 +1344,58 @@
++++ ../src/linux-8b607d1fd1baa4448df39b50cd907fc080e7f960/sound/usb/quirks.c	2017-05-27 11:41:44.000000000 +0200
+@@ -1344,22 +1344,59 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -36,6 +36,7 @@
 +	case USB_ID(0x22e1, 0xca01): /* HDTA Serenade DSD */
  	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
 +	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
++	case USB_ID(0x27f7, 0x3002): /* W4S DAC-2v2SE */
 +	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
 +	case USB_ID(0x6b42, 0x0042): /* MSB Technology */
  		if (fp->altsetting == 3)
