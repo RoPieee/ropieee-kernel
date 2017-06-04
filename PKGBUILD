@@ -10,7 +10,7 @@ _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
 pkgver=4.9.30
-pkgrel=2
+pkgrel=3
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -20,6 +20,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	"git+https://github.com/spockfish/xmos-native-dsd.git#branch=master"
         "https://github.com/Fourdee/linux/commit/70a8155a64fc3fde57f69f91da3b2835823e0061.patch"
 	"https://github.com/raspberrypi/linux/pull/1982/commits/d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch"
+	"https://github.com/raspberrypi/linux/pull/2048.patch"
         'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
         'config.txt'
         'cmdline.txt'
@@ -31,6 +32,7 @@ md5sums=('4548bafd90e70da1e57901beb91a7267'
          'SKIP'
          'f9345b6513beccc487179eb705b6f0cf'
          'ee1c0592251d7916ccb82ed96d038fe9'
+         'c832902fe7aaa7b5343161b101614fe0'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
@@ -50,6 +52,9 @@ prepare() {
 
   msg2 "patching: support for 384kHz"
   patch -Np1 -i ../d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch
+
+  msg2 "patching: support for Allo Digione"
+  patch -Np1 -i ../2048.patch
 
   msg2 "patching: kernel native DSD quirks"
   patch -Np1 -i ../usb-dsd-quirks.patch
