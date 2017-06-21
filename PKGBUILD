@@ -5,12 +5,12 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=31e73f03aa61482b89067ea3ea14670acd319e2e
+_commit=3c1164ccbadb34377d7cbf330b37dd903fef70de
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.30
-pkgrel=3
+pkgver=4.9.33
+pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -28,7 +28,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '99-linux.hook'
         'usb-dsd-quirks.patch')
-md5sums=('4548bafd90e70da1e57901beb91a7267'
+md5sums=('2aee8d4f1d29f1b9f5b0427d5533a41e'
          'SKIP'
          'f9345b6513beccc487179eb705b6f0cf'
          'ee1c0592251d7916ccb82ed96d038fe9'
@@ -37,10 +37,10 @@ md5sums=('4548bafd90e70da1e57901beb91a7267'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          '60bc3624123c183305677097bcd56212'
-         'b1bccc676b25e3264c98ac0530d95c3a'
+         '222966720216b4c101881ebaf266557e'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
-         'ed8e741473854cb9b9e7a52035b82a2b')
+         '2f81e6d44ef09155a888ce86718633a7')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -53,8 +53,8 @@ prepare() {
   msg2 "patching: support for 384kHz"
   patch -Np1 -i ../d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch
 
-  msg2 "patching: support for Allo Digione"
-  patch -Np1 -i ../2048.patch
+#  msg2 "patching: support for Allo Digione"
+#  patch -Np1 -i ../2048.patch
 
   msg2 "patching: kernel native DSD quirks"
   patch -Np1 -i ../usb-dsd-quirks.patch
