@@ -5,12 +5,12 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=f4a6fb4deb59064201e5276a57d8373144621c08
+_commit=983cf7a23cc3f286f4c22d360387a5bac298d37c
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
 pkgver=4.9.39
-pkgrel=1
+pkgrel=2
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -28,7 +28,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '99-linux.hook'
         'usb-dsd-quirks.patch')
-md5sums=('683f9c3a46c515755bcdb2178013633a'
+md5sums=('b7ebb34a4e8565be4bfcb55ca1bbf015'
          'SKIP'
          'f9345b6513beccc487179eb705b6f0cf'
          'ee1c0592251d7916ccb82ed96d038fe9'
@@ -37,7 +37,7 @@ md5sums=('683f9c3a46c515755bcdb2178013633a'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          '60bc3624123c183305677097bcd56212'
-         '222966720216b4c101881ebaf266557e'
+         '706cc283ae60325f93a213dfe051da34'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
          '2f81e6d44ef09155a888ce86718633a7')
