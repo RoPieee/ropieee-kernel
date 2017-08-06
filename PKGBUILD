@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=983cf7a23cc3f286f4c22d360387a5bac298d37c
+_commit=2e6aa1713ad27fc9db40e55a3eb4e1d00965239e
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.39
+pkgver=4.9.40
 pkgrel=2
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -28,7 +28,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '99-linux.hook'
         'usb-dsd-quirks.patch')
-md5sums=('b7ebb34a4e8565be4bfcb55ca1bbf015'
+md5sums=('d9eecdd8a8172d775cadcde1f123b542'
          'SKIP'
          'f9345b6513beccc487179eb705b6f0cf'
          'ee1c0592251d7916ccb82ed96d038fe9'
@@ -40,7 +40,7 @@ md5sums=('b7ebb34a4e8565be4bfcb55ca1bbf015'
          '706cc283ae60325f93a213dfe051da34'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
-         '2f81e6d44ef09155a888ce86718633a7')
+         'fd58ff6358ac4d9b4d398bc8e6f1b352')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -50,8 +50,8 @@ prepare() {
   msg2 "patching: eliminate noise at the start of DSD"
   patch -Np1 -i ../70a8155a64fc3fde57f69f91da3b2835823e0061.patch
 
-  msg2 "patching: support for 384kHz"
-  patch -Np1 -i ../d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch
+#  msg2 "patching: support for 384kHz"
+#  patch -Np1 -i ../d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch
 
 #  msg2 "patching: support for Allo Digione"
 #  patch -Np1 -i ../2048.patch

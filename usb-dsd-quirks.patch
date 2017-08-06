@@ -1,6 +1,6 @@
---- linux.org/sound/usb/quirks.c	2017-05-09 19:51:42.000000000 +0200
-+++ ../src/linux-0926c07dec16ca75cc01c06201c19be7086d3a4b/sound/usb/quirks.c	2017-06-21 21:45:55.000000000 +0200
-@@ -1344,22 +1344,60 @@
+--- linux.org/sound/usb/quirks.c	2017-07-29 21:30:19.000000000 +0200
++++ ../src/linux-2e6aa1713ad27fc9db40e55a3eb4e1d00965239e/sound/usb/quirks.c	2017-08-05 19:36:54.000000000 +0200
+@@ -1344,22 +1344,61 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -35,6 +35,7 @@
 +	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
 +	case USB_ID(0x22d9, 0x0426): /* OPPO HA-2 */
 +	case USB_ID(0x22e1, 0xca01): /* HDTA Serenade DSD */
++	case USB_ID(0x249c, 0x9326): /* M2Tech Young MkIII */
  	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
 +	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
 +	case USB_ID(0x27f7, 0x3002): /* W4S DAC-2v2SE */
