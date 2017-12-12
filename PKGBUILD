@@ -5,12 +5,12 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=7e441f636a07575e77bfe5760905a3f601701f50
+_commit=3a1b10a4770309529f945287a91a1402ca804585
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.60
-pkgrel=2
+pkgver=4.9.67
+pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -21,9 +21,11 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         "https://github.com/allocom/linux/commit/91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch"
         "https://github.com/allocom/linux/commit/4b46ccea40f9839d13904573e03bc7caee97c53c.patch"
         "https://github.com/Fourdee/linux/commit/70a8155a64fc3fde57f69f91da3b2835823e0061.patch"
+	"https://github.com/DigitalDreamtimeLtd/linux/commit/6224bb2a856146111815a1215732cad18df1d016.patch"
 	"https://github.com/raspberrypi/linux/pull/1460/commits/153a4f22c623d19b69094844cfab4bf5e3f57d22.patch"
 	"https://github.com/raspberrypi/linux/pull/1460/commits/43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch"
 	"https://github.com/raspberrypi/linux/pull/1460/commits/45fbb1dc957953f6871ef4679f998cb6125ae32c.patch"
+	"https://github.com/raspberrypi/linux/pull/1460/commits/b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch"
         'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
         'config.txt'
         'cmdline.txt'
@@ -32,25 +34,29 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         '99-linux.hook'
         'usb-dsd-quirks.patch'
 	'i-sabre-k2m.patch'
-	'kernel-alsa-support-for-384khz-sample-rates.patch')
-md5sums=('34529bb084f1ea734b714298d2d46ada'
+	'kernel-alsa-support-for-384khz-sample-rates.patch'
+	'add-384khz-support-for-5102a-codec.patch')
+md5sums=('d6e1f7832d6031eb491d2ed48633e0e8'
          '93164ce4a1a158e4edf63efb365b1d26'
          '81a1b2f0190bb8487eb42bf8cbe4814f'
          '9263b8b7480cb91a30eb4a61b45701f1'
          'f9345b6513beccc487179eb705b6f0cf'
+         'fd570fcef20c93e5796ac8ddbcfc0ee0'
          '36d73c8927a59c4337c310f7ece4c27e'
          '8f26c727f43df19abeccf7e682554a49'
          '12585e3a94fcdf2c7f7be97a6c522086'
+         '2ebc4d4e37eaf887853bb38cb654fb60'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         'a7e60c95322f367de2b0bc9add97e3c9'
+         '9fbb57efba5c92066b007abb9ae9d83f'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
          'b72c7042830bbe2f051bc481f2ebe909'
          '917614857efdf6dcce07c09db8d2084e'
-         'c91808bf64a135bd93ebdd3d8c5b1575')
+         'c91808bf64a135bd93ebdd3d8c5b1575'
+         'c3c479f7cd97158c025a55f0564bd331')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -60,19 +66,20 @@ prepare() {
   msg2 "patching: eliminate noise at the start of DSD"
   patch -Np1 -i ../70a8155a64fc3fde57f69f91da3b2835823e0061.patch
 
-#  msg2 "patching: support for 384kHz"
-#  patch -Np1 -i ../d896e4fa1f8ebcf182fb13aa8ceae38ba6b07c9c.patch
-
 #  msg2 "patching: latest stuff from Allo"
 #  patch -Np1 -i ../4b46ccea40f9839d13904573e03bc7caee97c53c.patch
 #  patch -Np1 -i ../91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch
 #  patch -Np1 -i ../b67b6b46e6d5326fb71dac73a112cbf0dafe9c6b.patch
 
-  msg2 "patching: 384k support I2S"
+  msg2 "patching: 384k support"
+  #patch -Np1 -i ../83669837232018909e97623588de355fe072546b.patch
+#  patch -Np1 -i ../6224bb2a856146111815a1215732cad18df1d016.patch
+  patch -Np1 -i ../b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch
   patch -Np1 -i ../153a4f22c623d19b69094844cfab4bf5e3f57d22.patch
   patch -Np1 -i ../43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch
 #  patch -Np1 -i ../45fbb1dc957953f6871ef4679f998cb6125ae32c.patch
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
+#  patch -Np1 -i ../add-384khz-support-for-5102a-codec.patch
 
   msg2 "patching: kernel native DSD quirks"
   patch -Np1 -i ../usb-dsd-quirks.patch
