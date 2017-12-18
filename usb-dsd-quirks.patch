@@ -1,7 +1,7 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2017-11-03 15:50:08.000000000 +0100
-+++ linux.new/sound/usb/quirks.c	2017-11-06 10:46:26.000000000 +0100
-@@ -1348,23 +1348,63 @@
+--- linux.org/sound/usb/quirks.c	2017-12-05 16:10:35.000000000 +0100
++++ linux.new/sound/usb/quirks.c	2017-12-18 23:08:03.000000000 +0100
+@@ -1348,23 +1348,65 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -16,6 +16,8 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
 +	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
 +	case USB_ID(0x2522, 0x0012): /* LH Labs VI DAC Infinity */
 +	case USB_ID(0x25ce, 0x001f): /* Mytek Brooklyn DAC */
++	case USB_ID(0x25ce, 0x0021): /* Mytek Manhattan DAC */
++	case USB_ID(0x25ce, 0x8025): /* Mytek Brooklyn DAC+ */
  	case USB_ID(0x2772, 0x0230): /* Pro-Ject Pre Box S2 Digital */
  		if (fp->altsetting == 2)
  			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
