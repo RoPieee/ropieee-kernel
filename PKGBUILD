@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=783daf505c2d8ecf26eeb4b4cd657f4b48072540
+_commit=a2f34d45809d8685bca1e91989e35746499ac400
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.77
+pkgver=4.9.80
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -36,7 +36,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'i-sabre-k2m.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'add-384khz-support-for-5102a-codec.patch')
-md5sums=('ff00c64e9a04be3824a6e1d9c8014728'
+md5sums=('3a585f8756acb0d71da4454c3802b8b9'
          '93164ce4a1a158e4edf63efb365b1d26'
          '81a1b2f0190bb8487eb42bf8cbe4814f'
          '9263b8b7480cb91a30eb4a61b45701f1'
