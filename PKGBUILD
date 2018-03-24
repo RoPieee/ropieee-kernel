@@ -10,7 +10,7 @@ _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
 pkgver=4.14.27
-pkgrel=3
+pkgrel=4
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -23,8 +23,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'config'
         'linux.preset'
         '99-linux.hook'
-        'usb-dsd-quirks.patch'
-	'i-sabre-k2m.patch'
+        'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
@@ -33,10 +32,10 @@ md5sums=('07088d9ddb83cb2ab3f793e587258777'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         'd64b69825a2618f0e1ef03032c34ad4e'
+         'a5cc8907ca716fe696f8a6f8833aefcd'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
-         'd3016b608e6fb5df4fda66be99937cb8'
+         'f9fe123546c5af08cf5a7697380fc2e3'
          '917614857efdf6dcce07c09db8d2084e'
          'ec0778debc64a779fb674aa1231d5a58'
          'defaeb558fb6ef21d55b4cd7a9e1d51f'
@@ -52,11 +51,8 @@ prepare() {
   patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
-#  msg2 "patching: kernel native DSD quirks"
-#  patch -Np1 -i ../usb-dsd-quirks.patch
-
-#  msg2 "patching: add support for Audiophonics I-Sabre K2M"
-#  patch -Np1 -i ../i-sabre-k2m.patch
+  msg2 "patching: kernel USB native DSD quirks"
+  patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
