@@ -16,16 +16,7 @@ url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-# "https://github.com/Fourdee/linux/commit/70a8155a64fc3fde57f69f91da3b2835823e0061.patch"
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
-        "https://github.com/allocom/linux/commit/b67b6b46e6d5326fb71dac73a112cbf0dafe9c6b.patch"
-        "https://github.com/allocom/linux/commit/91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch"
-        "https://github.com/allocom/linux/commit/4b46ccea40f9839d13904573e03bc7caee97c53c.patch"
-	"https://github.com/DigitalDreamtimeLtd/linux/commit/6224bb2a856146111815a1215732cad18df1d016.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/153a4f22c623d19b69094844cfab4bf5e3f57d22.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/45fbb1dc957953f6871ef4679f998cb6125ae32c.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch"
         'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
         'config.txt'
         'cmdline.txt'
@@ -35,16 +26,9 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'usb-dsd-quirks.patch'
 	'i-sabre-k2m.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
-	'add-384khz-support-for-5102a-codec.patch')
+	'kernel-sound-pcm512x-add-support-for-352k8.patch'
+	'kernel-sound-pcm5102a-add-support-for-384k.patch')
 md5sums=('07088d9ddb83cb2ab3f793e587258777'
-         '93164ce4a1a158e4edf63efb365b1d26'
-         '81a1b2f0190bb8487eb42bf8cbe4814f'
-         '9263b8b7480cb91a30eb4a61b45701f1'
-         'fd570fcef20c93e5796ac8ddbcfc0ee0'
-         '36d73c8927a59c4337c310f7ece4c27e'
-         '8f26c727f43df19abeccf7e682554a49'
-         '12585e3a94fcdf2c7f7be97a6c522086'
-         '2ebc4d4e37eaf887853bb38cb654fb60'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
@@ -54,27 +38,19 @@ md5sums=('07088d9ddb83cb2ab3f793e587258777'
          '982f9184dfcfbe52110795cf73674334'
          'd3016b608e6fb5df4fda66be99937cb8'
          '917614857efdf6dcce07c09db8d2084e'
-         'c91808bf64a135bd93ebdd3d8c5b1575'
-         'c3c479f7cd97158c025a55f0564bd331')
+         'ec0778debc64a779fb674aa1231d5a58'
+         'defaeb558fb6ef21d55b4cd7a9e1d51f'
+         '0c7adc3f558065e2f2343b973830a51e')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   cat "${srcdir}/config" > ./.config
 
-#  msg2 "patching: eliminate noise at the start of DSD"
-#  patch -Np1 -i ../70a8155a64fc3fde57f69f91da3b2835823e0061.patch
-
-#  msg2 "patching: latest stuff from Allo"
-#  patch -Np1 -i ../4b46ccea40f9839d13904573e03bc7caee97c53c.patch
-#  patch -Np1 -i ../91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch
-#  patch -Np1 -i ../b67b6b46e6d5326fb71dac73a112cbf0dafe9c6b.patch
-
   msg2 "patching: 384k support"
-#  patch -Np1 -i ../b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch
-#  patch -Np1 -i ../153a4f22c623d19b69094844cfab4bf5e3f57d22.patch
-#  patch -Np1 -i ../43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
+  patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
+  patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
 #  msg2 "patching: kernel native DSD quirks"
 #  patch -Np1 -i ../usb-dsd-quirks.patch
