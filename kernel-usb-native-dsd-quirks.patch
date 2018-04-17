@@ -1,7 +1,7 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2018-03-16 17:34:49.000000000 +0100
-+++ linux.new/sound/usb/quirks.c	2018-03-24 15:34:48.663174398 +0100
-@@ -1351,20 +1351,47 @@
+--- linux.org/sound/usb/quirks.c	2018-03-28 18:24:51.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2018-04-09 18:57:51.377380108 +0200
+@@ -1351,20 +1351,48 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -24,6 +24,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  		break;
  
 +	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
++	case USB_ID(0x152a, 0x8750): /* Topping DX7s */
 +	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
 +	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
 +	case USB_ID(0x16d0, 0x09db): /* NuPrime Audio DAC-9 */
