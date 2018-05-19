@@ -2,7 +2,7 @@
 # arg 2:  the old package version
 
 KERNEL_NAME=-raspberrypi-dsd
-KERNEL_VERSION=4.14.39-1-SPCKFSH
+KERNEL_VERSION=4.14.41-1-SPCKFSH
 
 disable_cma() {
   if [[ -f /boot/config.txt && $(grep '^cma' /boot/config.txt) != '' ]]; then
