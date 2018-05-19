@@ -1,7 +1,7 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2018-03-28 18:24:51.000000000 +0200
-+++ linux.new/sound/usb/quirks.c	2018-04-09 18:57:51.377380108 +0200
-@@ -1351,20 +1351,48 @@
+--- linux.org/sound/usb/quirks.c	2018-05-05 12:17:00.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2018-05-15 00:22:59.369775728 +0200
+@@ -1352,20 +1352,49 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -11,6 +11,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
 +	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
++	case USB_ID(0x20b1, 0x3089): /* Mola-Mola DAC */
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
 +	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
 +	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
