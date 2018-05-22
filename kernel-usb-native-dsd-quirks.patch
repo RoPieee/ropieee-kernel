@@ -1,7 +1,7 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2017-12-05 16:10:35.000000000 +0100
-+++ linux.new/sound/usb/quirks.c	2017-12-18 23:08:03.000000000 +0100
-@@ -1348,23 +1348,65 @@
+--- linux.org/sound/usb/quirks.c	2018-05-05 12:17:00.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2018-05-15 00:22:59.369775728 +0200
+@@ -1352,20 +1352,49 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
@@ -11,6 +11,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
 +	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
++	case USB_ID(0x20b1, 0x3089): /* Mola-Mola DAC */
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
 +	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
 +	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
@@ -24,6 +25,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  		break;
  
 +	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
++	case USB_ID(0x152a, 0x8750): /* Topping DX7s */
 +	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
 +	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
 +	case USB_ID(0x16d0, 0x09db): /* NuPrime Audio DAC-9 */
@@ -49,21 +51,3 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  		if (fp->altsetting == 3)
  			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
  		break;
-+
-+	/* Amanero Combo384 USB interface with native DSD support */
-+	case USB_ID(0x16d0, 0x071a):
-+		if (fp->altsetting == 2) {
-+			switch (chip->dev->descriptor.bcdDevice) {
-+			case 0x199:
-+				return SNDRV_PCM_FMTBIT_DSD_U32_LE;
-+			case 0x19b:
-+				return SNDRV_PCM_FMTBIT_DSD_U32_BE;
-+			default:
-+				break;
-+			}
-+		}
-+		break;
-+
- 	default:
- 		break;
- 	}

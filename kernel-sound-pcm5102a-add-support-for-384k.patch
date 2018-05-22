@@ -1,6 +1,6 @@
 diff -Naur linux.org/sound/soc/codecs/pcm5102a.c linux.new/sound/soc/codecs/pcm5102a.c
---- linux.org/sound/soc/codecs/pcm5102a.c	2017-11-03 15:50:08.000000000 +0100
-+++ linux.new/sound/soc/codecs/pcm5102a.c	2017-11-15 11:26:22.000000000 +0100
+--- linux.org/sound/soc/codecs/pcm5102a.c	2018-03-16 17:34:49.000000000 +0100
++++ linux.new/sound/soc/codecs/pcm5102a.c	2018-03-23 23:50:17.706828077 +0100
 @@ -25,7 +25,7 @@
  	.playback = {
  		.channels_min = 2,

@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=a2f34d45809d8685bca1e91989e35746499ac400
+_commit=adb282c91b45bd0dd76f2b5d3741850007912192
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.9.80
+pkgver=4.14.41
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -17,75 +17,41 @@ license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
-        "https://github.com/allocom/linux/commit/b67b6b46e6d5326fb71dac73a112cbf0dafe9c6b.patch"
-        "https://github.com/allocom/linux/commit/91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch"
-        "https://github.com/allocom/linux/commit/4b46ccea40f9839d13904573e03bc7caee97c53c.patch"
-        "https://github.com/Fourdee/linux/commit/70a8155a64fc3fde57f69f91da3b2835823e0061.patch"
-	"https://github.com/DigitalDreamtimeLtd/linux/commit/6224bb2a856146111815a1215732cad18df1d016.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/153a4f22c623d19b69094844cfab4bf5e3f57d22.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/45fbb1dc957953f6871ef4679f998cb6125ae32c.patch"
-	"https://github.com/raspberrypi/linux/pull/1460/commits/b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch"
         'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
         'config.txt'
         'cmdline.txt'
         'config'
         'linux.preset'
         '99-linux.hook'
-        'usb-dsd-quirks.patch'
-	'i-sabre-k2m.patch'
+        'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
-	'add-384khz-support-for-5102a-codec.patch')
-md5sums=('3a585f8756acb0d71da4454c3802b8b9'
-         '93164ce4a1a158e4edf63efb365b1d26'
-         '81a1b2f0190bb8487eb42bf8cbe4814f'
-         '9263b8b7480cb91a30eb4a61b45701f1'
-         'f9345b6513beccc487179eb705b6f0cf'
-         'fd570fcef20c93e5796ac8ddbcfc0ee0'
-         '36d73c8927a59c4337c310f7ece4c27e'
-         '8f26c727f43df19abeccf7e682554a49'
-         '12585e3a94fcdf2c7f7be97a6c522086'
-         '2ebc4d4e37eaf887853bb38cb654fb60'
+	'kernel-sound-pcm512x-add-support-for-352k8.patch'
+	'kernel-sound-pcm5102a-add-support-for-384k.patch')
+md5sums=('4e74d53876981e1f315dd2aea1133efd'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '9d1859a148c141276942f22b7c2933ef'
+         'a5cc8907ca716fe696f8a6f8833aefcd'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
-         'd3016b608e6fb5df4fda66be99937cb8'
-         '917614857efdf6dcce07c09db8d2084e'
-         'c91808bf64a135bd93ebdd3d8c5b1575'
-         'c3c479f7cd97158c025a55f0564bd331')
+         'f9b384966eec14fd7e424b2ea39ccd54'
+         'ec0778debc64a779fb674aa1231d5a58'
+         'defaeb558fb6ef21d55b4cd7a9e1d51f'
+         '0c7adc3f558065e2f2343b973830a51e')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
 
   cat "${srcdir}/config" > ./.config
 
-  msg2 "patching: eliminate noise at the start of DSD"
-  patch -Np1 -i ../70a8155a64fc3fde57f69f91da3b2835823e0061.patch
-
-#  msg2 "patching: latest stuff from Allo"
-#  patch -Np1 -i ../4b46ccea40f9839d13904573e03bc7caee97c53c.patch
-#  patch -Np1 -i ../91bad8f4e89e7a52c7a88ca9ca2cf6375541babe.patch
-#  patch -Np1 -i ../b67b6b46e6d5326fb71dac73a112cbf0dafe9c6b.patch
-
   msg2 "patching: 384k support"
-  #patch -Np1 -i ../83669837232018909e97623588de355fe072546b.patch
-#  patch -Np1 -i ../6224bb2a856146111815a1215732cad18df1d016.patch
-  patch -Np1 -i ../b6a61d0a7efba7080cb1fcb9db8fd93162f299b1.patch
-  patch -Np1 -i ../153a4f22c623d19b69094844cfab4bf5e3f57d22.patch
-  patch -Np1 -i ../43bb912c8b739d4d5f0f5df9c11f9d69f12dcbdf.patch
-#  patch -Np1 -i ../45fbb1dc957953f6871ef4679f998cb6125ae32c.patch
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
-#  patch -Np1 -i ../add-384khz-support-for-5102a-codec.patch
+  patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
+  patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
-  msg2 "patching: kernel native DSD quirks"
-  patch -Np1 -i ../usb-dsd-quirks.patch
-
-  msg2 "patching: add support for Audiophonics I-Sabre K2M"
-  patch -Np1 -i ../i-sabre-k2m.patch
+  msg2 "patching: kernel USB native DSD quirks"
+  patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
@@ -129,7 +95,7 @@ build() {
 
 _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
-  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7')
+  depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7' 'firmware-raspberrypi')
   optdepends=('crda: to set the correct wireless channels of your country')
   provides=('kernel26' "linux=${pkgver}")
   conflicts=('kernel26' 'linux')
@@ -148,9 +114,9 @@ _package() {
   make INSTALL_MOD_PATH="${pkgdir}" modules_install
   make INSTALL_DTBS_PATH="${pkgdir}/boot" dtbs_install
 
-  [[ $CARCH == "armv6h" ]] && perl scripts/mkknlimg --dtok arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel.img" \
+  [[ $CARCH == "armv6h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel.img" \
                            && rm -f "${pkgdir}"/boot/bcm{2836,2709,2710}*.dtb
-  [[ $CARCH == "armv7h" ]] && perl scripts/mkknlimg --dtok arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel7.img" \
+  [[ $CARCH == "armv7h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel7.img" \
                            && rm -f "${pkgdir}"/boot/bcm{2835,2708}*.dtb
   cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
 
@@ -232,10 +198,6 @@ _package-headers() {
   cp arch/${KARCH}/Makefile "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/"
 
   cp arch/${KARCH}/kernel/asm-offsets.s "${pkgdir}/usr/lib/modules/${_kernver}/build/arch/${KARCH}/kernel/"
-
-  # add docbook makefile
-  install -D -m644 Documentation/DocBook/Makefile \
-    "${pkgdir}/usr/lib/modules/${_kernver}/build/Documentation/DocBook/Makefile"
 
   # add dm headers
   mkdir -p "${pkgdir}/usr/lib/modules/${_kernver}/build/drivers/md"
