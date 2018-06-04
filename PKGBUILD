@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=adb282c91b45bd0dd76f2b5d3741850007912192
+_commit=e3e047e02089bf95d28e1c8e2477e22752bed52e
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.14.41
+pkgver=4.14.44
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -27,12 +27,12 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('4e74d53876981e1f315dd2aea1133efd'
+md5sums=('4b64404e0f9641237b87456160f7f3db'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         'a5cc8907ca716fe696f8a6f8833aefcd'
+         '27cd27a603a9337c10c8150b66972f84'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
          'f9b384966eec14fd7e424b2ea39ccd54'
