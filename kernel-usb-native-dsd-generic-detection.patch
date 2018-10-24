@@ -1,0 +1,49 @@
+diff -Naur linux.org/sound/usb/card.h linux.new/sound/usb/card.h
+--- linux.org/sound/usb/card.h	2018-09-26 17:12:42.000000000 +0200
++++ linux.new/sound/usb/card.h	2018-09-29 20:14:26.029014840 +0200
+@@ -32,6 +32,7 @@
+ 	struct snd_pcm_chmap_elem *chmap; /* (optional) channel map */
+ 	bool dsd_dop;			/* add DOP headers in case of DSD samples */
+ 	bool dsd_bitrev;		/* reverse the bits of each DSD sample */
++	bool dsd_raw;			/* altsetting is raw DSD */
+ };
+ 
+ struct snd_usb_substream;
+diff -Naur linux.org/sound/usb/format.c linux.new/sound/usb/format.c
+--- linux.org/sound/usb/format.c	2018-09-26 17:12:42.000000000 +0200
++++ linux.new/sound/usb/format.c	2018-09-29 20:14:26.029014840 +0200
+@@ -63,8 +63,11 @@
+ 		sample_width = fmt->bBitResolution;
+ 		sample_bytes = fmt->bSubslotSize;
+ 
+-		if (format & UAC2_FORMAT_TYPE_I_RAW_DATA)
++		if (format & UAC2_FORMAT_TYPE_I_RAW_DATA) {
+ 			pcm_formats |= SNDRV_PCM_FMTBIT_SPECIAL;
++			/* flag potentially raw DSD capable altsettings */
++			fp->dsd_raw = true;
++		}
+ 
+ 		format <<= 1;
+ 		break;
+diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
+--- linux.org/sound/usb/quirks.c	2018-09-26 17:12:42.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2018-09-29 20:15:49.388953011 +0200
+@@ -1411,5 +1411,18 @@
+ 			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
+ 	}
+ 
++	/* Mostly generic method to detect many DSD-capable implementations -
++	 * from XMOS/Thesycon */
++	switch (USB_ID_VENDOR(chip->usb_id)) {
++	case 0x20b1:  /* XMOS based devices */
++	case 0x25ce:  /* Mytek devices */
++		if (fp->dsd_raw)
++			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
++		break;
++	default:
++		break;
++
++	}
++
+ 	return 0;
+ }

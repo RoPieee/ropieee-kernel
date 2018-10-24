@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=e3e047e02089bf95d28e1c8e2477e22752bed52e
+_commit=3f8c1fd4b21a317e7329d4c8f67ac34d886e08c2
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.14.44
+pkgver=4.14.76
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -23,19 +23,21 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'config'
         'linux.preset'
         '99-linux.hook'
+	'kernel-usb-native-dsd-generic-detection.patch'
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('4b64404e0f9641237b87456160f7f3db'
+md5sums=('8388e1385cc07e8f79d12466d1f96bd1'
          '4a410ab9a1eefe82e158d36df02b3589'
          '8c3cb6d8f0609b43f09d083b4006ec5a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '27cd27a603a9337c10c8150b66972f84'
+         'e259dbb5407cfab2446cbb82fed6f0b5'
          '552c43bf6c0225bc213b31ee942b7000'
          '982f9184dfcfbe52110795cf73674334'
-         'f9b384966eec14fd7e424b2ea39ccd54'
+         '59723235d523b774488ae5a5bf03f7c9'
+         '036d1e99aaf3c263371153332536515d'
          'ec0778debc64a779fb674aa1231d5a58'
          'defaeb558fb6ef21d55b4cd7a9e1d51f'
          '0c7adc3f558065e2f2343b973830a51e')
@@ -51,6 +53,7 @@ prepare() {
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
   msg2 "patching: kernel USB native DSD quirks"
+  patch -Np1 -i ../kernel-usb-native-dsd-generic-detection.patch
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
   # add pkgrel to extraversion

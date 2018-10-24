@@ -1,13 +1,13 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2018-05-05 12:17:00.000000000 +0200
-+++ linux.new/sound/usb/quirks.c	2018-05-15 00:22:59.369775728 +0200
-@@ -1352,20 +1352,49 @@
+--- linux.org/sound/usb/quirks.c	2018-09-26 17:12:42.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2018-09-29 19:54:37.389870176 +0200
+@@ -1355,20 +1355,47 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
+-	case USB_ID(0x20b1, 0x3008): /* iFi Audio micro/nano iDSD */
 +	case USB_ID(0x1511, 0x0037): /* AURALiC VEGA */
 +	case USB_ID(0x20b1, 0x0002): /* Wyred 4 Sound DAC-2 DSD */
- 	case USB_ID(0x20b1, 0x3008): /* iFi Audio micro/nano iDSD */
 +	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
@@ -37,7 +37,6 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
 +	case USB_ID(0x20b1, 0x3021): /* Eastern El. MiniMax Tube DAC Supreme */
  	case USB_ID(0x20b1, 0x3023): /* Aune X1S 32BIT/384 DSD DAC */
 +	case USB_ID(0x20b1, 0x302d): /* Unison Research Unico CD Due */
-+	case USB_ID(0x20b1, 0x3036): /* Holo Springs Level 3 R2R DAC */
 +	case USB_ID(0x20b1, 0x307b): /* CH Precision C1 DAC */
 +	case USB_ID(0x20b1, 0x3086): /* Singxer F-1 converter board */
 +	case USB_ID(0x22d9, 0x0426): /* OPPO HA-2 */
