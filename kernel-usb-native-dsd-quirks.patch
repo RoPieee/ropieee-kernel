@@ -1,7 +1,7 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2019-01-18 09:34:59.000000000 +0100
-+++ linux.new/sound/usb/quirks.c	2019-01-18 21:40:01.549671234 +0100
-@@ -1364,6 +1364,7 @@
+--- linux.org/sound/usb/quirks.c	2019-01-24 17:53:25.000000000 +0100
++++ linux.new/sound/usb/quirks.c	2019-02-03 19:21:39.067838647 +0100
+@@ -1361,6 +1361,7 @@
  	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
@@ -9,8 +9,11 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
  	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
  	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
-@@ -1376,6 +1377,7 @@
+@@ -1371,8 +1372,10 @@
+ 		break;
+ 
  	case USB_ID(0x152a, 0x85de): /* SMSL D1 DAC */
++	case USB_ID(0x152a, 0x85dd): /* SMSL M8A */
  	case USB_ID(0x16d0, 0x09dd): /* Encore mDSD */
  	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
 +	case USB_ID(0x152a, 0x8750): /* Topping DX7s */

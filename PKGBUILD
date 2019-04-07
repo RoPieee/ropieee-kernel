@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=78eb13b25d5e53b3e3b8031ddc4eb2049a0e9cd0
+_commit=d65a0f76d3adcf86a6f5c614c68edb3aeb3b8590
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.25
+pkgver=4.19.32
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -28,15 +28,15 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('d659e022481902910bf8d5aa25e029b0'
+md5sums=('8c76400ea6a8671a4b3a6901e4b43a99'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '0b72c264eb044fe64cceff914d561e26'
+         'b8426bbcdfc8523ff686aca396cd77d5'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '69e1db90d78f691dc446fe2ab94727eb'
          '59723235d523b774488ae5a5bf03f7c9'
-         'ec4c46e4c02d4d5e7cb667a958451adb'
+         '0be09d1cd8bf0f9d043d67fecb164901'
          'ec0778debc64a779fb674aa1231d5a58'
          'defaeb558fb6ef21d55b4cd7a9e1d51f'
          '0c7adc3f558065e2f2343b973830a51e')
@@ -119,7 +119,7 @@ _package() {
                            && rm -f "${pkgdir}"/boot/bcm{2836,2709,2710}*.dtb
   [[ $CARCH == "armv7h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel7.img" \
                            && rm -f "${pkgdir}"/boot/bcm{2835,2708}*.dtb
-  cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
+  # cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
 
   # make room for external modules
   local _extramodules="extramodules-${_basekernel}${_kernelname}"
