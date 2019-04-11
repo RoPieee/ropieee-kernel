@@ -1,7 +1,13 @@
-diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2019-01-24 17:53:25.000000000 +0100
-+++ linux.new/sound/usb/quirks.c	2019-02-03 19:21:39.067838647 +0100
-@@ -1361,6 +1361,7 @@
+--- linux.org/sound/usb/quirks.c	2019-04-06 23:20:03.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2019-04-11 10:58:55.079274554 +0200
+@@ -1355,12 +1355,14 @@
+ 
+ 	/* XMOS based USB DACs */
+ 	switch (chip->usb_id) {
++	case USB_ID(0x139f, 0x5504): /* Nagra DAC */
+ 	case USB_ID(0x20b1, 0x3008): /* iFi Audio micro/nano iDSD */
+ 	case USB_ID(0x1511, 0x0037): /* AURALiC VEGA */
+ 	case USB_ID(0x20b1, 0x0002): /* Wyred 4 Sound DAC-2 DSD */
  	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
  	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
  	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
@@ -9,7 +15,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
  	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
  	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
-@@ -1371,8 +1372,10 @@
+@@ -1371,8 +1373,10 @@
  		break;
  
  	case USB_ID(0x152a, 0x85de): /* SMSL D1 DAC */
