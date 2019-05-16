@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=74a357602c469b159202ce7ef629d7e8fd8ba97c
+_commit=3f647927237babee492cbb6ce0ab29417af55ea0
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.40
+pkgver=4.19.42
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -28,7 +28,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('bfae826137112b011a8905704a275f94'
+md5sums=('2f4de26f0d3bebfe8b00a55ca10a4b7b'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
          '642150d3f95eced1d10ca0f74a0ad524'
