@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=3f647927237babee492cbb6ce0ab29417af55ea0
+_commit=0ab888996b8ac53a673e1350ce704772aed76e50
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.42
+pkgver=4.19.46
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -28,10 +28,10 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('2f4de26f0d3bebfe8b00a55ca10a4b7b'
+md5sums=('aec4f865e6e43a9282cb8edcb46c97a3'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '642150d3f95eced1d10ca0f74a0ad524'
+         '8bbf11b788caa9b3efac3b9c570eaba4'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '69e1db90d78f691dc446fe2ab94727eb'
@@ -48,7 +48,7 @@ prepare() {
 
   msg2 "patching: 384k support"
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
-  patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
+#  patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
   msg2 "patching: kernel USB native DSD quirks"
