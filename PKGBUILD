@@ -26,7 +26,6 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-usb-native-dsd-generic-detection.patch'
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
-	'kernel-sound-pcm512x-add-support-for-352k8.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
 md5sums=('aec4f865e6e43a9282cb8edcb46c97a3'
          '7c6b37a1353caccf6d3786bb4161c218'
@@ -48,7 +47,6 @@ prepare() {
 
   msg2 "patching: 384k support"
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
-#  patch -Np1 -i ../kernel-sound-pcm512x-add-support-for-352k8.patch
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
   msg2 "patching: kernel USB native DSD quirks"
