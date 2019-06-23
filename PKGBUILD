@@ -5,11 +5,11 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=0ab888996b8ac53a673e1350ce704772aed76e50
+_commit=4395da03133888a4d2ea920dfb88d04e7534038d
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.46
+pkgver=4.19.49
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
@@ -27,7 +27,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('aec4f865e6e43a9282cb8edcb46c97a3'
+md5sums=('88965c58e0304fe0fa9ca63b30bf2733'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
          '8bbf11b788caa9b3efac3b9c570eaba4'
@@ -35,9 +35,8 @@ md5sums=('aec4f865e6e43a9282cb8edcb46c97a3'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '69e1db90d78f691dc446fe2ab94727eb'
          '59723235d523b774488ae5a5bf03f7c9'
-         '2222e6a491b2027e97f98df382811656'
+         '0da70b81794f151723f72d3d0c1d3f5f'
          'ec0778debc64a779fb674aa1231d5a58'
-         'defaeb558fb6ef21d55b4cd7a9e1d51f'
          '0c7adc3f558065e2f2343b973830a51e')
 
 prepare() {
