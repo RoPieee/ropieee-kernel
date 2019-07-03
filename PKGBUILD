@@ -5,12 +5,12 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=4395da03133888a4d2ea920dfb88d04e7534038d
+_commit=9d1deec93fa8b1b4953ff5e9210349f3c85b9a8d
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.49
-pkgrel=1
+pkgver=4.19.56
+pkgrel=4
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -27,15 +27,15 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('88965c58e0304fe0fa9ca63b30bf2733'
+md5sums=('955b98808f588def20ce4146b7741ed5'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '8bbf11b788caa9b3efac3b9c570eaba4'
+         '8b80680b5b5d0947b7330b89605ae016'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '69e1db90d78f691dc446fe2ab94727eb'
          '59723235d523b774488ae5a5bf03f7c9'
-         '0da70b81794f151723f72d3d0c1d3f5f'
+         'dd32ee771466622909738df15d9fddf9'
          'ec0778debc64a779fb674aa1231d5a58'
          '0c7adc3f558065e2f2343b973830a51e')
 
@@ -113,9 +113,9 @@ _package() {
   make INSTALL_DTBS_PATH="${pkgdir}/boot" dtbs_install
 
   [[ $CARCH == "armv6h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel.img" \
-                           && rm -f "${pkgdir}"/boot/bcm{2836,2709,2710}*.dtb
+                           && rm -f "${pkgdir}"/boot/bcm{2836,2709,2710,2711}*.dtb
   [[ $CARCH == "armv7h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel7.img" \
-                           && rm -f "${pkgdir}"/boot/bcm{2835,2708}*.dtb
+                           && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708}*.dtb
   # cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
 
   # make room for external modules

@@ -1,6 +1,6 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
 --- linux.org/sound/usb/quirks.c	2019-05-28 16:37:51.000000000 +0200
-+++ linux.new/sound/usb/quirks.c	2019-06-10 11:25:25.407657602 +0200
++++ linux.new/sound/usb/quirks.c	2019-06-26 21:18:05.836530788 +0200
 @@ -1359,11 +1359,14 @@
  
  	/* XMOS based USB DACs */
