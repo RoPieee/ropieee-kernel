@@ -4,14 +4,14 @@
 
 buildarch=20
 
-pkgbase=linux-raspberrypi-dsd
-_commit=9d1deec93fa8b1b4953ff5e9210349f3c85b9a8d
+pkgbase=linux-raspberrypi-${EXTERNAL_PKGBASE}
+_commit=18acdefe95cfc7ccd76d0f0cd00e9c8d9f66fad4
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-pkgver=4.19.56
-pkgrel=4
-arch=('armv6h' 'armv7h')
+pkgver=4.19.57
+pkgrel=1
+arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
@@ -20,6 +20,8 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'config.txt'
         'cmdline.txt'
         'config'
+	'config_rpi2_rpi3'
+	'config_rpi4'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
@@ -27,10 +29,12 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('955b98808f588def20ce4146b7741ed5'
+md5sums=('e45a52a9fb11b684d896b1c3e96e48cd'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
-         '8b80680b5b5d0947b7330b89605ae016'
+         'c7df4140ea594658116f7e556ebc2e75'
+         '8da01f277b2cbacd69b729c6bc2674fb'
+         'aef6778d82d2ad5315d3d2f8f393dfb1'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          '69e1db90d78f691dc446fe2ab94727eb'
@@ -39,10 +43,18 @@ md5sums=('955b98808f588def20ce4146b7741ed5'
          'ec0778debc64a779fb674aa1231d5a58'
          '0c7adc3f558065e2f2343b973830a51e')
 
+abort() {
+   msg2 "$1"
+   exit 1
+}
+
 prepare() {
   cd "${srcdir}/${_srcname}"
 
-  cat "${srcdir}/config" > ./.config
+  [[ -z "$RPI_CONFIG" ]] && abort "RPI_CONFIG variable not set!"
+  msg2 "setting up config: ${RPI_CONFIG}"
+  cat "${srcdir}/${RPI_CONFIG}" > ./.config
+#  cat "${srcdir}/bcm2709_defconfig" > ./.config
 
   msg2 "patching: 384k support"
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
@@ -103,6 +115,10 @@ _package() {
 
   KARCH=arm
 
+  # image name
+  [[ "$RPI_CONFIG" == "config_rpi2_rpi3" ]] && KERNEL_IMAGE="kernel7.img"
+  [[ "$RPI_CONFIG" == "config_rpi4" ]]      && KERNEL_IMAGE="kernel7l.img"
+
   # get kernel version
   _kernver="$(make kernelrelease)"
   _basekernel=${_kernver%%-*}
@@ -112,10 +128,13 @@ _package() {
   make INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
   make INSTALL_DTBS_PATH="${pkgdir}/boot" dtbs_install
 
-  [[ $CARCH == "armv6h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel.img" \
-                           && rm -f "${pkgdir}"/boot/bcm{2836,2709,2710,2711}*.dtb
-  [[ $CARCH == "armv7h" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/kernel7.img" \
-                           && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708}*.dtb
+  [[ $RPI_CONFIG == "config_rpi2_rpi3" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/$KERNEL_IMAGE" \
+                                          && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708,2711}*.dtb
+
+  [[ $RPI_CONFIG == "config_rpi4" ]]      && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/$KERNEL_IMAGE" \
+                                          && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708,2709,2710}*.dtb
+
+
   # cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
 
   # make room for external modules

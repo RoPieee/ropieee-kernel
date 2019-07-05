@@ -1,0 +1,4 @@
+#!/bin/bash
+
+makepkg -Cf RPI_CONFIG=config_rpi4 EXTERNAL_PKGBASE=pae
+
