@@ -1,4 +1,14 @@
 #!/bin/bash
 
-makepkg -Cf RPI_CONFIG=config_rpi4 EXTERNAL_PKGBASE=pae
+# 4.19.57 = 8ea4810a9f2d0c510f6a8fd56805e82ac76904a3
+# 4.19.58 = 8222f38b1ceadd0642d49812fd34a3a6cb00e264
+# 4.19.60 = 20565c94ca877a099a3c9c5fa39a0380f3d16491
+# 4.19.65 = f1c1b67b26ed3cb789037d1c844d4105deaa3cfd
+# 4.19.67 = 174fcab91765ef8fe3562c9858fb62f1a471c2d6
+
+
+
+
+rm -rf ./src
+makepkg -Cf RPI_CONFIG=config_rpi4 EXT_PKGBASE=pae EXT_GIT_HASH="174fcab91765ef8fe3562c9858fb62f1a471c2d6" EXT_PKG_VER="4.19.67"
 

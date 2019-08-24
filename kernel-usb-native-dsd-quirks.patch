@@ -1,6 +1,6 @@
-diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2019-05-28 16:37:51.000000000 +0200
-+++ linux.new/sound/usb/quirks.c	2019-06-26 21:18:05.836530788 +0200
+diff -Naur kernel.org/sound/usb/quirks.c kernel.new/sound/usb/quirks.c
+--- kernel.org/sound/usb/quirks.c	2019-08-23 19:21:14.000000000 +0200
++++ kernel.new/sound/usb/quirks.c	2019-08-24 13:25:50.792165123 +0200
 @@ -1359,11 +1359,14 @@
  
  	/* XMOS based USB DACs */
@@ -16,7 +16,7 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
  	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
  	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
-@@ -1375,9 +1378,11 @@
+@@ -1375,9 +1378,12 @@
  
  	case USB_ID(0x10cb, 0x0103): /* The Bit Opus #3; with fp->dsd_raw */
  	case USB_ID(0x152a, 0x85de): /* SMSL D1 DAC */
@@ -25,11 +25,12 @@ diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
  	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
 -	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
 +	case USB_ID(0x152a, 0x8750): /* Topping DX7s */
++	case USB_ID(0x16d0, 0x06b1): /* NuPrime IDA-16 */
 +	case USB_ID(0x16d0, 0x06b2): /* NuPrime DAC-10 */
  	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
  	case USB_ID(0x16d0, 0x09db): /* NuPrime Audio DAC-9 */
  	case USB_ID(0x1db5, 0x0003): /* Bryston BDA3 */
-@@ -1397,6 +1402,7 @@
+@@ -1397,6 +1403,7 @@
  	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
  	case USB_ID(0x27f7, 0x3002): /* W4S DAC-2v2SE */
  	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
