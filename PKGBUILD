@@ -12,7 +12,7 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.67
+pkgver=4.19.75
 real_pkgver=${EXT_PKG_VER}
 pkgrel=1
 arch=('armv7h')
@@ -32,20 +32,24 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-usb-native-dsd-generic-detection.patch'
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
-	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('86cf78aa3f2edaf19da6d4da54d46fc5'
+	'kernel-sound-pcm5102a-add-support-for-384k.patch'
+	'kernel-drivers-net-usb-ax88179_178a.patch'
+	'kernel-add-rtl8812au-network-driver.patch')
+md5sums=('dad130907d153516df6079f569ef6d1f'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
          'c7df4140ea594658116f7e556ebc2e75'
-         '59bdcd2f21db9dd2d60ad37003eab4f6'
-         '1402be49a02c044a5485794dd028c05c'
+         '77993211f980846c8fc245b8f6aa2917'
+         '9ab7ea6376ab9de17c11b7d6b0db7ccc'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
          '59723235d523b774488ae5a5bf03f7c9'
          '1da0d841aae10c9b0711f521d8a0e282'
          'ec0778debc64a779fb674aa1231d5a58'
-         '0c7adc3f558065e2f2343b973830a51e')
+         '0c7adc3f558065e2f2343b973830a51e'
+         '2bc8928dad8202d9acba5c1e81a0803f'
+         '2d7b6bd883af73a8987c58f20c591391')
 
 abort() {
    msg2 "$1"
@@ -67,6 +71,12 @@ prepare() {
   msg2 "patching: kernel USB native DSD quirks"
 #  patch -Np1 -i ../kernel-usb-native-dsd-generic-detection.patch
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
+
+  msg2 "patching: kernel driver used by the Allo USBridge Signature"
+  patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
+
+  msg2 "Patching: add kernel driver RTL 8812AU"
+  patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
