@@ -14,7 +14,7 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.75
 real_pkgver=${EXT_PKG_VER}
-pkgrel=1
+pkgrel=2
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -35,12 +35,12 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch')
-md5sums=('dad130907d153516df6079f569ef6d1f'
+md5sums=('50e02184216d2f2f4fd68c4b03acae7f'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
          'c7df4140ea594658116f7e556ebc2e75'
          '77993211f980846c8fc245b8f6aa2917'
-         '9ab7ea6376ab9de17c11b7d6b0db7ccc'
+         '848994e0de98e99744054e78e53ff65e'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
