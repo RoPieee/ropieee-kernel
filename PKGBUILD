@@ -12,7 +12,7 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.75
+pkgver=4.19.76
 real_pkgver=${EXT_PKG_VER}
 pkgrel=2
 arch=('armv7h')
@@ -35,17 +35,17 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch')
-md5sums=('50e02184216d2f2f4fd68c4b03acae7f'
+md5sums=('43293d032ecf30a486a9b3f318fe622a'
          '7c6b37a1353caccf6d3786bb4161c218'
          'fcd90122a2621d0a7d6cdd020da8723d'
          'c7df4140ea594658116f7e556ebc2e75'
-         '77993211f980846c8fc245b8f6aa2917'
+         '21a15f691d2b86f0beed429477b48efa'
          '848994e0de98e99744054e78e53ff65e'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
          '59723235d523b774488ae5a5bf03f7c9'
-         '1da0d841aae10c9b0711f521d8a0e282'
+         '7a8c48dc7a0e8f0d23a69d99659ad154'
          'ec0778debc64a779fb674aa1231d5a58'
          '0c7adc3f558065e2f2343b973830a51e'
          '2bc8928dad8202d9acba5c1e81a0803f'
