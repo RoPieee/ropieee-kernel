@@ -5,42 +5,54 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=6b5c4a2508403839af29ef44059d04acbe0ee204
+_commit=7688b39276ff9952df381d79de63b258e73971ce
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi with native DSD support"
-pkgver=4.14.112
-pkgrel=1
+# the real_pkgver is the actual kernel version of the package
+# normally this should be the same as pkgver, but if we for some reason need to downgrade
+# we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
+pkgver=4.19.80
+real_pkgver=4.14.114
+pkgrel=3
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
-        'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
+# 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.bin' 'https://archlinuxarm.org/builder/src/brcmfmac43430-sdio.txt'
         'config.txt'
         'cmdline.txt'
         'config'
         'linux.preset'
-        '99-linux.hook'
+        '60-linux.hook'
+        '90-linux.hook'
 	'kernel-usb-native-dsd-generic-detection.patch'
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm512x-add-support-for-352k8.patch'
-	'kernel-sound-pcm5102a-add-support-for-384k.patch')
-md5sums=('a38a61fb86579485d413166766e83509'
-         '4a410ab9a1eefe82e158d36df02b3589'
-         '8c3cb6d8f0609b43f09d083b4006ec5a'
+	'kernel-sound-pcm5102a-add-support-for-384k.patch'
+	'kernel-drivers-net-usb-ax88179_178a.patch'
+	'kernel-add-rtl8812au-network-driver.patch'
+	'kernel-add-audiophonics-i-sabre-driver.patch'
+	'i-sabre-k2m.patch')
+md5sums=('94544ffbcf329b8d6187fb0cbc5a681c'
          '7c6b37a1353caccf6d3786bb4161c218'
-         'fcd90122a2621d0a7d6cdd020da8723d'
-         '5b4cce91d9bfa76ab2def45a26739d10'
-         '552c43bf6c0225bc213b31ee942b7000'
-         '982f9184dfcfbe52110795cf73674334'
+         '7c09a9bcb2ad790100fb5e58b125c159'
+         'cfaefc765671c559dd7639889351ea83'
+         '86d4a35722b5410e3b29fc92dae15d4b'
+         'ce6c81ad1ad1f8b333fd6077d47abdaf'
+         'ba6ee1d0a4c28fc35748013b4468c3d3'
          '59723235d523b774488ae5a5bf03f7c9'
-         '64a55610980ffb3d4b5dd2ac722a3a03'
+         'bdec385a1e07aeb41547b4280a712243'
          'ec0778debc64a779fb674aa1231d5a58'
          'defaeb558fb6ef21d55b4cd7a9e1d51f'
-         '0c7adc3f558065e2f2343b973830a51e')
+         '0c7adc3f558065e2f2343b973830a51e'
+         '0a9a45c9a86a712ad1dc7d5b39aa675d'
+         '2d7b6bd883af73a8987c58f20c591391'
+         '136065bb14c06205c1b5837f369e1a82'
+         'f5513f39f793597813d0257f0f12195e')
 
 prepare() {
   cd "${srcdir}/${_srcname}"
@@ -56,14 +68,24 @@ prepare() {
 #  patch -Np1 -i ../kernel-usb-native-dsd-generic-detection.patch
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
+  msg2 "patching: kernel driver used by the Allo USBridge Signature"
+  patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
+
+  msg2 "Patching: add kernel driver RTL 8812AU"
+  patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
+
+  msg2 "Patching: add kernel driver Audiophonics I-Sabre"
+#  patch -Np1 -i ../kernel-add-audiophonics-i-sabre-driver.patch
+  patch -Np1 -i ../i-sabre-k2m.patch
+
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
 
   # don't run depmod on 'make install'. We'll do this ourselves in packaging
   sed -i '2iexit 0' scripts/depmod.sh
 
-  mkdir firmware/brcm
-  cp ../brcmfmac43430-sdio.{bin,txt} firmware/brcm
+#  mkdir firmware/brcm
+#  cp ../brcmfmac43430-sdio.{bin,txt} firmware/brcm
 }
 
 build() {
@@ -100,7 +122,7 @@ _package() {
   pkgdesc="The Linux Kernel and modules - ${_desc}"
   depends=('coreutils' 'linux-firmware' 'kmod' 'mkinitcpio>=0.7' 'firmware-raspberrypi')
   optdepends=('crda: to set the correct wireless channels of your country')
-  provides=('kernel26' "linux=${pkgver}")
+  provides=('kernel26' "linux=${real_pkgver}")
   conflicts=('kernel26' 'linux')
   install=${pkgname}.install
   backup=('boot/config.txt' 'boot/cmdline.txt')
@@ -129,16 +151,31 @@ _package() {
     -e  "s/KERNEL_VERSION=.*/KERNEL_VERSION=${_kernver}/g" \
     -i "${startdir}/${pkgname}.install"
 
-  # install mkinitcpio preset file for kernel
-  install -D -m644 "${srcdir}/linux.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
-  sed \
-    -e "1s|'linux.*'|'${pkgbase}'|" \
-    -e "s|ALL_kver=.*|ALL_kver=\"${_kernver}\"|" \
-    -i "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+  # sed expression for following substitutions
+  local _subst="
+    s|%PKGBASE%|${pkgbase}|g
+    s|%KERNVER%|${_kernver}|g
+    s|%EXTRAMODULES%|${_extramodules}|g
+  "
 
-  # install pacman hook for initramfs regeneration
-  sed "s|%PKGBASE%|${pkgbase}|g" "${srcdir}/99-linux.hook" |
-    install -D -m644 /dev/stdin "${pkgdir}/usr/share/libalpm/hooks/99-${pkgbase}.hook"
+  # install mkinitcpio preset file for kernel
+  sed "${_subst}" ../linux.preset |
+    install -Dm644 /dev/stdin "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+
+#  install -D -m644 "${srcdir}/linux.preset" "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+#  sed \
+#    -e "1s|'linux.*'|'${pkgbase}'|" \
+#    -e "s|ALL_kver=.*|ALL_kver=\"${_kernver}\"|" \
+#    -i "${pkgdir}/etc/mkinitcpio.d/${pkgbase}.preset"
+
+  # install pacman hooks
+  sed "${_subst}" ../60-linux.hook |
+    install -Dm644 /dev/stdin "${pkgdir}/usr/share/libalpm/hooks/60-${pkgbase}.hook"
+  sed "${_subst}" ../90-linux.hook |
+    install -Dm644 /dev/stdin "${pkgdir}/usr/share/libalpm/hooks/90-${pkgbase}.hook"
+
+#  sed "s|%PKGBASE%|${pkgbase}|g" "${srcdir}/99-linux.hook" |
+#    install -D -m644 /dev/stdin "${pkgdir}/usr/share/libalpm/hooks/99-${pkgbase}.hook"
 
   # remove build and source links
   rm -f "${pkgdir}"/lib/modules/${_kernver}/{source,build}
@@ -163,7 +200,7 @@ _package() {
 
 _package-headers() {
   pkgdesc="Header files and scripts for building modules for linux kernel - ${_desc}"
-  provides=("linux-headers=${pkgver}")
+  provides=("linux-headers=${real_pkgver}")
   conflicts=('linux-headers')
   replaces=('linux-raspberrypi-latest-headers')
 
