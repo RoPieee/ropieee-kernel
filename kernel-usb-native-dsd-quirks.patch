@@ -1,37 +1,32 @@
 diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2019-09-20 12:46:58.000000000 +0200
-+++ linux.new/sound/usb/quirks.c	2019-10-11 21:53:11.782210137 +0200
-@@ -1359,11 +1359,14 @@
+--- linux.org/sound/usb/quirks.c	2020-01-14 15:38:21.000000000 +0100
++++ linux.new/sound/usb/quirks.c	2020-01-14 21:16:58.374370479 +0100
+@@ -1374,6 +1374,7 @@
  
  	/* XMOS based USB DACs */
  	switch (chip->usb_id) {
 +	case USB_ID(0x139f, 0x5504): /* Nagra DAC */
-+	case USB_ID(0x20b1, 0x3008): /* iFi Audio micro/nano iDSD */
  	case USB_ID(0x1511, 0x0037): /* AURALiC VEGA */
- 	case USB_ID(0x20b1, 0x0002): /* Wyred 4 Sound DAC-2 DSD */
- 	case USB_ID(0x20b1, 0x2004): /* Matrix Audio X-SPDIF 2 */
- 	case USB_ID(0x20b1, 0x2008): /* Matrix Audio X-Sabre */
- 	case USB_ID(0x20b1, 0x300a): /* Matrix Audio Mini-i Pro */
-+	case USB_ID(0x20b1, 0x3089): /* Mola-Mola DAC */
- 	case USB_ID(0x22d9, 0x0416): /* OPPO HA-1 */
- 	case USB_ID(0x22d9, 0x0436): /* OPPO Sonica */
- 	case USB_ID(0x22d9, 0x0461): /* OPPO UDP-205 */
-@@ -1375,9 +1378,13 @@
+ 	case USB_ID(0x2522, 0x0012): /* LH Labs VI DAC Infinity */
+ 	case USB_ID(0x2772, 0x0230): /* Pro-Ject Pre Box S2 Digital */
+@@ -1381,12 +1382,16 @@
+ 			return SNDRV_PCM_FMTBIT_DSD_U32_BE;
+ 		break;
  
- 	case USB_ID(0x10cb, 0x0103): /* The Bit Opus #3; with fp->dsd_raw */
- 	case USB_ID(0x152a, 0x85de): /* SMSL D1 DAC */
-+	case USB_ID(0x152a, 0x85dd): /* SMSL M8A */
- 	case USB_ID(0x16d0, 0x09dd): /* Encore mDSD */
++	case USB_ID(0x0944, 0x0208): /* Korg DS-DAC-10R */
  	case USB_ID(0x0d8c, 0x0316): /* Hegel HD12 DSD */
--	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
-+	case USB_ID(0x152a, 0x8750): /* Topping DX7s */
+ 	case USB_ID(0x10cb, 0x0103): /* The Bit Opus #3; with fp->dsd_raw */
+ 	case USB_ID(0x16b0, 0x06b2): /* NuPrime DAC-10 */
+ 	case USB_ID(0x16d0, 0x09dd): /* Encore mDSD */
+ 	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
+ 	case USB_ID(0x16d0, 0x09db): /* NuPrime Audio DAC-9 */
 +	case USB_ID(0x16d0, 0x06b0): /* NuPrime uDSD */
 +	case USB_ID(0x16d0, 0x06b1): /* NuPrime IDA-16 */
 +	case USB_ID(0x16d0, 0x06b2): /* NuPrime DAC-10 */
- 	case USB_ID(0x16d0, 0x0733): /* Furutech ADL Stratos */
- 	case USB_ID(0x16d0, 0x09db): /* NuPrime Audio DAC-9 */
  	case USB_ID(0x1db5, 0x0003): /* Bryston BDA3 */
-@@ -1397,6 +1404,7 @@
+ 	case USB_ID(0x22e1, 0xca01): /* HDTA Serenade DSD */
+ 	case USB_ID(0x249c, 0x9326): /* M2Tech Young MkIII */
+@@ -1394,6 +1399,7 @@
  	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
  	case USB_ID(0x27f7, 0x3002): /* W4S DAC-2v2SE */
  	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */

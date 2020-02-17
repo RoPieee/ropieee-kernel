@@ -5,7 +5,7 @@
 buildarch=20
 
 #pkgbase=linux-raspberrypi-dsd
-_commit=047589b6dcd5dfd9673a995c5d36ec4073e578b5
+_commit=65cd479134433363e1235a3aee4e41e281384cf6
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
@@ -13,9 +13,9 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.79
-real_pkgver=4.19.79
-pkgrel=1
+pkgver=4.19.102
+real_pkgver=4.19.102
+pkgrel=3
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -34,21 +34,23 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
-	'kernel-add-rtl8812au-network-driver.patch')
-md5sums=('7dd4de606a8cfcb1dd8c0aab115472f9'
+	'kernel-add-rtl8812au-network-driver.patch'
+	'kernel-add-rtl8192eu-network-driver.patch')
+md5sums=('5d083305f55c21855795c188c652aad3'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          'cb57239c6340652039068b0302b17db4'
-         '35134bba5c33aad83d4383a555ec4178'
+         'a4b6e27af6e21ef72d23c0476d16432a'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
          '59723235d523b774488ae5a5bf03f7c9'
-         '7a8c48dc7a0e8f0d23a69d99659ad154'
+         '9a4b841ac9ad2e35666ddd2f6a55eadd'
          'ec0778debc64a779fb674aa1231d5a58'
          '0c7adc3f558065e2f2343b973830a51e'
-         '2bc8928dad8202d9acba5c1e81a0803f'
-         '2d7b6bd883af73a8987c58f20c591391')
+         'e076cef466fd0f1798412d11bce4ce49'
+         '2d7b6bd883af73a8987c58f20c591391'
+         '63682c6e30b071c9b998da234a65a25f')
 
 abort() {
    msg2 "$1"
@@ -76,6 +78,9 @@ prepare() {
   msg2 "Patching: add kernel driver RTL 8812AU"
   patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
 
+  msg2 "Patching: add kernel driver RTL 8192EU"
+  patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
+
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
 
@@ -98,6 +103,8 @@ build() {
   #make oldconfig # using old config from previous kernel version
   #make bcmrpi_defconfig # using RPi defconfig
   # ... or manually edit .config
+  make bcm2711_defconfig
+  ./scripts/kconfig/merge_config.sh ./.config ../../config_overrule
 
   # Copy back our configuration (use with new kernel version)
   #cp ./.config ../${pkgver}.config
@@ -111,7 +118,8 @@ build() {
 
   #yes "" | make config
 
-  make ${MAKEFLAGS} zImage modules dtbs
+  #make ${MAKEFLAGS} zImage modules dtbs
+  make -j3 zImage modules dtbs
 }
 
 _package() {

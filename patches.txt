@@ -1,0 +1,19 @@
+ax88179_178a driver
+-------------------
+https://github.com/raspberrypi/linux/pull/2999
+
+rtl8812au driver
+----------------
+https://github.com/gnab/rtl8812au
+
+rtl8192eu driver
+----------------
+https://github.com/Mange/rtl8192eu-linux-driver
+
+***********************************************************
+***********************************************************
+***********************************************************
+
+possible solution for rtl8811au:
+
+replace rtl8812au driver above with: https://github.com/aircrack-ng/rtl8812au
