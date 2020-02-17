@@ -1,6 +1,6 @@
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/arm 4.14.114-3 Kernel Configuration
+# Linux/arm 4.14.114-5 Kernel Configuration
 #
 CONFIG_ARM=y
 CONFIG_ARM_HAS_SG_CHAIN=y
@@ -2213,6 +2213,8 @@ CONFIG_RTL8192C_COMMON=m
 CONFIG_RTL8XXXU=m
 # CONFIG_RTL8XXXU_UNTESTED is not set
 CONFIG_RTL8812AU=m
+CONFIG_88XXAU=m
+CONFIG_RTL8192EU=m
 CONFIG_WLAN_VENDOR_RSI=y
 CONFIG_RSI_91X=m
 # CONFIG_RSI_DEBUGFS is not set

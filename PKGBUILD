@@ -14,7 +14,7 @@ _desc="Raspberry Pi with native DSD support"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.80
 real_pkgver=4.14.114
-pkgrel=3
+pkgrel=5
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -35,12 +35,13 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
+	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-audiophonics-i-sabre-driver.patch'
 	'i-sabre-k2m.patch')
 md5sums=('94544ffbcf329b8d6187fb0cbc5a681c'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
-         'cfaefc765671c559dd7639889351ea83'
+         '119a4f6f2d073a98b901630958bf9a1b'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
@@ -49,8 +50,9 @@ md5sums=('94544ffbcf329b8d6187fb0cbc5a681c'
          'ec0778debc64a779fb674aa1231d5a58'
          'defaeb558fb6ef21d55b4cd7a9e1d51f'
          '0c7adc3f558065e2f2343b973830a51e'
-         '0a9a45c9a86a712ad1dc7d5b39aa675d'
+         'db65beb304abbeb55e7f4a5744d3f76f'
          '2d7b6bd883af73a8987c58f20c591391'
+         '63682c6e30b071c9b998da234a65a25f'
          '136065bb14c06205c1b5837f369e1a82'
          'f5513f39f793597813d0257f0f12195e')
 
@@ -65,7 +67,6 @@ prepare() {
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
   msg2 "patching: kernel USB native DSD quirks"
-#  patch -Np1 -i ../kernel-usb-native-dsd-generic-detection.patch
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
   msg2 "patching: kernel driver used by the Allo USBridge Signature"
@@ -74,8 +75,10 @@ prepare() {
   msg2 "Patching: add kernel driver RTL 8812AU"
   patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
 
+  msg2 "Patching: add kernel driver RTL 8192EU"
+  patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
+
   msg2 "Patching: add kernel driver Audiophonics I-Sabre"
-#  patch -Np1 -i ../kernel-add-audiophonics-i-sabre-driver.patch
   patch -Np1 -i ../i-sabre-k2m.patch
 
   # add pkgrel to extraversion
