@@ -118,8 +118,7 @@ build() {
 
   #yes "" | make config
 
-  #make ${MAKEFLAGS} zImage modules dtbs
-  make -j3 zImage modules dtbs
+  make ${MAKEFLAGS} zImage modules dtbs
 }
 
 _package() {
@@ -169,7 +168,7 @@ _package() {
   rm "${pkgdir}"/usr/lib/modules/${_kernver}/{source,build}
 
   # now we call depmod...
-  depmod -b "${pkgdir}/usr" -F System.map "${_kernver}"
+  /usr/sbin/depmod -b "${pkgdir}/usr" -F System.map "${_kernver}"
 
   # sed expression for following substitutions
   local _subst="
