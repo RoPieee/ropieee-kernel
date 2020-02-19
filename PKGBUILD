@@ -60,8 +60,8 @@ abort() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
-  msg2 "setting up config: ${_rpiconfig}"
-  cat "${srcdir}/${_rpiconfig}" > ./.config
+#  msg2 "setting up config: ${_rpiconfig}"
+#  cat "${srcdir}/${_rpiconfig}" > ./.config
 #  cat "${srcdir}/bcm2709_defconfig" > ./.config
 
   msg2 "patching: 384k support"
@@ -103,11 +103,11 @@ build() {
   #make oldconfig # using old config from previous kernel version
   #make bcmrpi_defconfig # using RPi defconfig
   # ... or manually edit .config
-  make bcm2711_defconfig
+  make bcm2709_defconfig
   ./scripts/kconfig/merge_config.sh ./.config ../../config_overrule
 
   # Copy back our configuration (use with new kernel version)
-  #cp ./.config ../${pkgver}.config
+  cp ./.config ../${pkgver}.config
 
   ####################
   # stop here
@@ -299,6 +299,7 @@ _package-headers() {
 
 # pkgbase
 
+CFG="pi23"
 test -z $CFG && abort "env var CFG should be set to pi23 or pi4!"
 
 if [ "$CFG" == "pi23" ]
