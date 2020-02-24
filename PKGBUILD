@@ -4,8 +4,8 @@
 
 buildarch=20
 
-#pkgbase=linux-raspberrypi-dsd
-_commit=65cd479134433363e1235a3aee4e41e281384cf6
+pkgbase=linux-raspberrypi-pae
+_commit=9634b843e28cae9df42b08ea37e136822c339a3f
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
@@ -13,9 +13,9 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.102
-real_pkgver=4.19.102
-pkgrel=3
+pkgver=4.19.105
+real_pkgver=4.19.105
+pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -24,8 +24,6 @@ options=('!strip')
 source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'config.txt'
         'cmdline.txt'
-	'config_rpi2_rpi3'
-	'config_rpi4'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
@@ -36,11 +34,9 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch')
-md5sums=('5d083305f55c21855795c188c652aad3'
+md5sums=('545931f65600e893579913afc5b2baf0'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
-         'cb57239c6340652039068b0302b17db4'
-         'a4b6e27af6e21ef72d23c0476d16432a'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
@@ -60,8 +56,8 @@ abort() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
-  msg2 "setting up config: ${_rpiconfig}"
-  cat "${srcdir}/${_rpiconfig}" > ./.config
+#  msg2 "setting up config: ${_rpiconfig}"
+#  cat "${srcdir}/${_rpiconfig}" > ./.config
 #  cat "${srcdir}/bcm2709_defconfig" > ./.config
 
   msg2 "patching: 384k support"
@@ -93,7 +89,6 @@ build() {
   cd "${srcdir}/${_srcname}"
 
   # get kernel version
-  make prepare
 
   # load configuration
   # Configure the kernel. Replace the line below with one of your choice.
@@ -105,9 +100,10 @@ build() {
   # ... or manually edit .config
   make bcm2711_defconfig
   ./scripts/kconfig/merge_config.sh ./.config ../../config_overrule
+  make prepare
 
   # Copy back our configuration (use with new kernel version)
-  #cp ./.config ../${pkgver}.config
+  cp ./.config ../../${pkgver}.config
 
   ####################
   # stop here
@@ -136,8 +132,7 @@ _package() {
   KARCH=arm
 
   # image name
-  [[ "$_rpiconfig" == "config_rpi2_rpi3" ]] && KERNEL_IMAGE="kernel7.img"
-  [[ "$_rpiconfig" == "config_rpi4" ]]      && KERNEL_IMAGE="kernel7l.img"
+  KERNEL_IMAGE="kernel7l.img"
 
   # get kernel version
   _kernver="$(make kernelrelease)"
@@ -148,11 +143,8 @@ _package() {
   make INSTALL_MOD_PATH="${pkgdir}/usr" modules_install
   make INSTALL_DTBS_PATH="${pkgdir}/boot" dtbs_install
 
-  [[ $_rpiconfig == "config_rpi2_rpi3" ]] && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/$KERNEL_IMAGE" \
-                                          && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708,2711}*.dtb
-
-  [[ $_rpiconfig == "config_rpi4" ]]      && cp arch/$KARCH/boot/zImage "${pkgdir}/boot/$KERNEL_IMAGE" \
-                                          && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708,2709,2710}*.dtb
+  cp arch/$KARCH/boot/zImage "${pkgdir}/boot/$KERNEL_IMAGE" \
+  && rm -f "${pkgdir}"/boot/bcm{2835,2836,2837,2838,2708,2709,2710}*.dtb
 
   # cp arch/$KARCH/boot/dts/overlays/README "${pkgdir}/boot/overlays"
 
@@ -296,22 +288,6 @@ _package-headers() {
   # remove unneeded architectures
   rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/build/arch/{alpha,arc,arm26,arm64,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,metag,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,x86,xtensa}
 }
-
-# pkgbase
-
-test -z $CFG && abort "env var CFG should be set to pi23 or pi4!"
-
-if [ "$CFG" == "pi23" ]
-then
-   pkgbase=linux-raspberrypi-dsd
-   _rpiconfig="config_rpi2_rpi3"
-elif [ "$CFG" == "pi4" ]
-then
-   pkgbase=linux-raspberrypi-pae
-   _rpiconfig="config_rpi4"
-else
-   abort "unknown kernel config!"
-fi
 
 pkgname=("${pkgbase}" "${pkgbase}-headers")
 for _p in ${pkgname[@]}; do
