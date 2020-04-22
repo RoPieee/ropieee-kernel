@@ -5,7 +5,7 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=b13fc60b529fe9e4fee4a7a5caf73d582003abfa
+_commit=748d8384cef4427e26bada774aa153568acefb21
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
@@ -14,7 +14,7 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.115
 real_pkgver=4.19.115
-pkgrel=1
+pkgrel=2
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -33,7 +33,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch')
-md5sums=('a0427bd25b92df338e0bc96d066a16e5'
+md5sums=('a782a70a1a4a2e7087e241391f6237dd'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
@@ -45,7 +45,7 @@ md5sums=('a0427bd25b92df338e0bc96d066a16e5'
          '0c7adc3f558065e2f2343b973830a51e'
          'e076cef466fd0f1798412d11bce4ce49'
          '2d7b6bd883af73a8987c58f20c591391'
-         '63682c6e30b071c9b998da234a65a25f')
+         '65e0bee3cd6fe4e30d862d098173703e')
 abort() {
    msg2 "$1"
    exit 1
