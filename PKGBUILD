@@ -5,16 +5,16 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-pae
-_commit=748d8384cef4427e26bada774aa153568acefb21
+_commit=fe2c7bf4cad4641dfb6f12712755515ab15815ca
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.115
-real_pkgver=4.19.115
-pkgrel=4
+pkgver=4.19.118
+real_pkgver=4.19.118
+pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -34,7 +34,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-rtl88x2bu-network-driver.patch')
-md5sums=('a782a70a1a4a2e7087e241391f6237dd'
+md5sums=('5ff7f122b14e9e36c3299b2ee45ee53b'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
