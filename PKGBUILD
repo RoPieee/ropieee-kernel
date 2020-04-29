@@ -9,13 +9,12 @@ _commit=748d8384cef4427e26bada774aa153568acefb21
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
-#_rpiconfig="config_rpi2_rpi3"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.115
 real_pkgver=4.19.115
-pkgrel=3
+pkgrel=4
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -33,7 +32,8 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
-	'kernel-add-rtl8192eu-network-driver.patch')
+	'kernel-add-rtl8192eu-network-driver.patch'
+	'kernel-add-rtl88x2bu-network-driver.patch')
 md5sums=('a782a70a1a4a2e7087e241391f6237dd'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
@@ -46,7 +46,8 @@ md5sums=('a782a70a1a4a2e7087e241391f6237dd'
          '0c7adc3f558065e2f2343b973830a51e'
          'e076cef466fd0f1798412d11bce4ce49'
          '2d7b6bd883af73a8987c58f20c591391'
-         '65e0bee3cd6fe4e30d862d098173703e')
+         '65e0bee3cd6fe4e30d862d098173703e'
+         '81742df9f342eaf8e8d2ee2a124efa3b')
 abort() {
    msg2 "$1"
    exit 1
@@ -54,10 +55,6 @@ abort() {
 
 prepare() {
   cd "${srcdir}/${_srcname}"
-
-#  msg2 "setting up config: ${_rpiconfig}"
-#  cat "${srcdir}/${_rpiconfig}" > ./.config
-#  cat "${srcdir}/bcm2709_defconfig" > ./.config
 
   msg2 "patching: 384k support"
   patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
@@ -75,6 +72,9 @@ prepare() {
 
   msg2 "Patching: add kernel driver RTL 8192EU"
   patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
+
+  msg2 "Patching: add kernel driver RTL 88x2BU"
+  patch -Np1 -i ../kernel-add-rtl88x2bu-network-driver.patch
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
