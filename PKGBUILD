@@ -5,15 +5,15 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-pae
-_commit=fe2c7bf4cad4641dfb6f12712755515ab15815ca
+_commit=f0e620550b8b422fef4adcabb2d0e8e69f1fec75
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.118
-real_pkgver=4.19.118
+pkgver=4.19.122
+real_pkgver=4.19.122
 pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
@@ -26,28 +26,28 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
-	'kernel-usb-native-dsd-generic-detection.patch'
         'kernel-usb-native-dsd-quirks.patch'
 	'kernel-alsa-support-for-384khz-sample-rates.patch'
 	'kernel-sound-pcm5102a-add-support-for-384k.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch'
-	'kernel-add-rtl88x2bu-network-driver.patch')
-md5sums=('5ff7f122b14e9e36c3299b2ee45ee53b'
+	'kernel-add-rtl88x2bu-network-driver.patch'
+	'kernel-add-rtl8723bu-network-driver.patch')
+md5sums=('1adf347bbf5474821d1ac49f6c0917de'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
-         '59723235d523b774488ae5a5bf03f7c9'
-         '9a4b841ac9ad2e35666ddd2f6a55eadd'
+         'b40572fa03d93433de9433fb4efe77b6'
          'ec0778debc64a779fb674aa1231d5a58'
          '0c7adc3f558065e2f2343b973830a51e'
          'e076cef466fd0f1798412d11bce4ce49'
          '2d7b6bd883af73a8987c58f20c591391'
          '65e0bee3cd6fe4e30d862d098173703e'
-         '81742df9f342eaf8e8d2ee2a124efa3b')
+         'fd18c7692935226d48355ce49309f728'
+         '492cacb9918f80bc5aeca152a4e04129')
 abort() {
    msg2 "$1"
    exit 1
@@ -61,7 +61,6 @@ prepare() {
   patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
 
   msg2 "patching: kernel USB native DSD quirks"
-#  patch -Np1 -i ../kernel-usb-native-dsd-generic-detection.patch
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
   msg2 "patching: kernel driver used by the Allo USBridge Signature"
@@ -76,6 +75,9 @@ prepare() {
   msg2 "Patching: add kernel driver RTL 88x2BU"
   patch -Np1 -i ../kernel-add-rtl88x2bu-network-driver.patch
 
+  msg2 "Patching: add kernel driver RTL 8723BU"
+  patch -Np1 -i ../kernel-add-rtl8723bu-network-driver.patch
+
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
 
@@ -86,8 +88,6 @@ prepare() {
 
 build() {
   cd "${srcdir}/${_srcname}"
-
-  # get kernel version
 
   # load configuration
   # Configure the kernel. Replace the line below with one of your choice.
