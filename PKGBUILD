@@ -5,7 +5,7 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=abaa3760da89d6fb38e55473fffc9a31dd0b1d7a
+_commit=fe915debc1925397f78db8bbfc9f488b0ce4e009
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
@@ -14,7 +14,7 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.127
 real_pkgver=4.19.127
-pkgrel=1
+pkgrel=3
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -34,7 +34,7 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-rtl88x2bu-network-driver.patch'
 	'kernel-add-rtl8723bu-network-driver.patch')
-md5sums=('58f4147d6caffc04a09a6edb2e784a21'
+md5sums=('6ee780fbc817642656d7c935d46fc160'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
