@@ -5,16 +5,16 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-pae
-_commit=fe915debc1925397f78db8bbfc9f488b0ce4e009
+_commit=9d49ae69a1448f2180229b82794bfaa1c78679f7
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.127
-real_pkgver=4.19.127
-pkgrel=3
+pkgver=5.4.51
+real_pkgver=5.4.51
+pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -34,19 +34,19 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
 	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-rtl88x2bu-network-driver.patch'
 	'kernel-add-rtl8723bu-network-driver.patch')
-md5sums=('6ee780fbc817642656d7c935d46fc160'
+md5sums=('be427a9c652e5845f1ef4b7e431ca1d8'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
          'db339c40effe188e8e18f78490ba2262'
-         'ec0778debc64a779fb674aa1231d5a58'
+         'db94ae3101d416f5bc97e55d0588f11a'
          '0c7adc3f558065e2f2343b973830a51e'
-         'e076cef466fd0f1798412d11bce4ce49'
-         '2d7b6bd883af73a8987c58f20c591391'
-         '65e0bee3cd6fe4e30d862d098173703e'
-         'fd18c7692935226d48355ce49309f728'
+         '964a770ce46ea4252f2d5c2557102c82'
+         '319e1d3199e9082e2ef5f397ce3feefa'
+         '1786431a88827c765bf612fe8ff9c326'
+         'f8819268391e8941a0084f9a0c8e477f'
          '492cacb9918f80bc5aeca152a4e04129')
 abort() {
    msg2 "$1"

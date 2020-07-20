@@ -1,6 +1,6 @@
 ax88179_178a driver
 -------------------
-https://github.com/raspberrypi/linux/pull/2999
+https://github.com/allocom/USBridgeSig-AX2v0
 
 rtl8812au driver
 ----------------
@@ -9,6 +9,10 @@ https://github.com/gnab/rtl8812au
 rtl8192eu driver
 ----------------
 https://github.com/Mange/rtl8192eu-linux-driver
+
+rtl88x2bu driver
+----------------
+https://github.com/cilynx/rtl88x2bu
 
 ***********************************************************
 ***********************************************************

@@ -1,24 +1,12 @@
-diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax88179_178a.c
---- linux.org/drivers/net/usb/ax88179_178a.c	2020-02-10 18:35:32.000000000 +0100
-+++ linux.new/drivers/net/usb/ax88179_178a.c	2020-02-11 14:30:15.610538660 +0100
-@@ -1,277 +1,216 @@
+diff --color -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax88179_178a.c
+--- linux.org/drivers/net/usb/ax88179_178a.c	2020-07-17 19:08:11.000000000 +0200
++++ linux.new/drivers/net/usb/ax88179_178a.c	2020-07-20 09:19:56.414326661 +0200
+@@ -1,265 +1,216 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
 -/*
 - * ASIX AX88179/178A USB 3.0/2.0 to Gigabit Ethernet Devices
 - *
 - * Copyright (C) 2011-2013 ASIX
-- *
-- * This program is free software; you can redistribute it and/or modify
-- * it under the terms of the GNU General Public License
-- * as published by the Free Software Foundation; either version 2
-- * of the License, or (at your option) any later version.
-- *
-- * This program is distributed in the hope that it will be useful,
-- * but WITHOUT ANY WARRANTY; without even the implied warranty of
-- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-- * GNU General Public License for more details.
-- *
-- * You should have received a copy of the GNU General Public License
-- * along with this program; if not, see <http://www.gnu.org/licenses/>.
 - */
 -
 +#include <linux/signal.h>
@@ -264,7 +252,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +{
 +	void *buf = NULL;
 +	int err = -ENOMEM;
-+
+ 
+-	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
+-		 value, index, data, size);
 +	if (size) {
 +		buf = kmalloc(size, GFP_KERNEL);
 +		if (!buf)
@@ -305,16 +295,14 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		}
 +   	}
  
--	ret = fn(dev, cmd, USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
--		 value, index, data, size);
+-	if (unlikely(ret < 0))
+-		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
+-			    index, ret);
 +	err = usb_control_msg(dev->udev, usb_sndctrlpipe(dev->udev, 0),
 +			      cmd, reqtype, value, index, buf, size,
 +			      USB_CTRL_SET_TIMEOUT);
 +	kfree(buf);
- 
--	if (unlikely(ret < 0))
--		netdev_warn(dev->net, "Failed to read reg index 0x%04x: %d\n",
--			    index, ret);
++
 +out:
 +	return err;
 +}
@@ -323,30 +311,30 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		    u16 value, u16 index, void *data, u16 size)
 +{
 +	int ret;
- 
++
 +	if (usb_autopm_get_interface(dev->intf) < 0)
 +		return -ENODEV;
 +	ret = __ax_usb_read_cmd(dev, cmd, reqtype, value, index,
 +				data, size);
++	usb_autopm_put_interface(dev->intf);
++	return ret;
++}
++
++int __ax_write_cmd(struct ax_device *dev, u8 cmd, u8 reqtype,
++		     u16 value, u16 index, const void *data, u16 size)
++{
++	int ret;	
+ 
++	if (usb_autopm_get_interface(dev->intf) < 0)
++		return -ENODEV;
++	ret = __ax_usb_write_cmd(dev, cmd, reqtype, value, index,
++				 data, size);
 +	usb_autopm_put_interface(dev->intf);
  	return ret;
  }
  
 -static int __ax88179_write_cmd(struct usbnet *dev, u8 cmd, u16 value, u16 index,
 -			       u16 size, void *data, int in_pm)
-+int __ax_write_cmd(struct ax_device *dev, u8 cmd, u8 reqtype,
-+		     u16 value, u16 index, const void *data, u16 size)
-+{
-+	int ret;	
-+
-+	if (usb_autopm_get_interface(dev->intf) < 0)
-+		return -ENODEV;
-+	ret = __ax_usb_write_cmd(dev, cmd, reqtype, value, index,
-+				 data, size);
-+	usb_autopm_put_interface(dev->intf);
-+	return ret;
-+}
-+
 +int __ax_read_cmd_nopm(struct ax_device *dev, u8 cmd, u8 reqtype,
 +			  u16 value, u16 index, void *data, u16 size)
 +{
@@ -451,7 +439,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 1);
  		le32_to_cpus(&buf);
  		*((u32 *)data) = buf;
-@@ -282,13 +221,13 @@
+@@ -270,13 +221,13 @@
  	return ret;
  }
  
@@ -467,7 +455,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  		buf = *((u16 *)data);
  		cpu_to_le16s(&buf);
  		ret = __ax88179_write_cmd(dev, cmd, value, index,
-@@ -301,18 +240,19 @@
+@@ -289,18 +240,19 @@
  	return ret;
  }
  
@@ -493,7 +481,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  		ret = __ax88179_read_cmd(dev, cmd, value, index, size, &buf, 0);
  		le32_to_cpus(&buf);
  		*((u32 *)data) = buf;
-@@ -323,13 +263,13 @@
+@@ -311,13 +263,13 @@
  	return ret;
  }
  
@@ -509,7 +497,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  		buf = *((u16 *)data);
  		cpu_to_le16s(&buf);
  		ret = __ax88179_write_cmd(dev, cmd, value, index,
-@@ -342,605 +282,1455 @@
+@@ -330,605 +282,1455 @@
  	return ret;
  }
  
@@ -696,11 +684,11 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	if (ret < 0)
 -		return ret;
 +	netdev = axdev->netdev;
-+
-+	if (!netif_carrier_ok(netdev))
-+		return;
  
 -	return tmp16;
++	if (!netif_carrier_ok(netdev))
++		return;
++
 +	usb_mark_last_busy(axdev->udev);
 +
 +	switch (status) {
@@ -836,7 +824,19 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -}
 +	if (test_bit(AX88179_UNPLUG, &axdev->flags)) 
 +		return;
-+
+ 
+-/* This function is used to enable the autodetach function. */
+-/* This function is determined by offset 0x43 of EEPROM */
+-static int ax88179_auto_detach(struct usbnet *dev, int in_pm)
+-{
+-	u16 tmp16;
+-	u8 tmp8;
+-	int (*fnr)(struct usbnet *, u8, u16, u16, u16, void *);
+-	int (*fnw)(struct usbnet *, u8, u16, u16, u16, void *);
+-
+-	if (!in_pm) {
+-		fnr = ax88179_read_cmd;
+-		fnw = ax88179_write_cmd;
 +	switch (status) {
 +	case 0:			/* success */
 +		break;
@@ -861,19 +861,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	
 +	event = urb->transfer_buffer;
 +	axdev->link = event->link & AX_INT_PPLS_LINK;
- 
--/* This function is used to enable the autodetach function. */
--/* This function is determined by offset 0x43 of EEPROM */
--static int ax88179_auto_detach(struct usbnet *dev, int in_pm)
--{
--	u16 tmp16;
--	u8 tmp8;
--	int (*fnr)(struct usbnet *, u8, u16, u16, u16, void *);
--	int (*fnw)(struct usbnet *, u8, u16, u16, u16, void *);
--
--	if (!in_pm) {
--		fnr = ax88179_read_cmd;
--		fnw = ax88179_write_cmd;
++
 +	if (axdev->link) {
 +		if (!netif_carrier_ok(axdev->netdev)) { //Link up
 +			set_bit(AX88179_LINK_CHG, &axdev->flags);
@@ -927,21 +915,17 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  
 -static int ax88179_resume(struct usb_interface *intf)
 +static inline void *__tx_buf_align(void *data)
-+{
-+	return (void *)ALIGN((uintptr_t)data, TX_ALIGN);
-+}
-+
-+static void ax_free_buffer(struct ax_device *axdev)
  {
 -	struct usbnet *dev = usb_get_intfdata(intf);
 -	u16 tmp16;
 -	u8 tmp8;
-+	int i;
++	return (void *)ALIGN((uintptr_t)data, TX_ALIGN);
++}
  
 -	usbnet_link_change(dev, 0, 0);
-+	for (i = 0; i < AX88179_MAX_RX; i++) {
-+		usb_free_urb(axdev->rx_list[i].urb);
-+		axdev->rx_list[i].urb = NULL;
++static void ax_free_buffer(struct ax_device *axdev)
++{
++	int i;
  
 -	/* Power up ethernet PHY */
 -	tmp16 = 0;
@@ -953,6 +937,10 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	ax88179_write_cmd_nopm(dev, AX_ACCESS_MAC, AX_PHYPWR_RSTCTL,
 -			       2, 2, &tmp16);
 -	msleep(200);
++	for (i = 0; i < AX88179_MAX_RX; i++) {
++		usb_free_urb(axdev->rx_list[i].urb);
++		axdev->rx_list[i].urb = NULL;
++
 +		kfree(axdev->rx_list[i].buffer);
 +		axdev->rx_list[i].buffer = NULL;
 +		axdev->rx_list[i].head = NULL;
@@ -1113,12 +1101,12 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	return -ENOMEM;
  }
 +/* End of Allocate TX/RX memory */
-+
+ 
+-static int ax88179_get_eeprom_len(struct net_device *net)
 +/*
 + * TX/RX operations
 + */
- 
--static int ax88179_get_eeprom_len(struct net_device *net)
++
 +static void ax_lso_complete (struct urb *urb)
  {
 -	return AX_EEPROM_LEN;
@@ -1231,16 +1219,16 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	entry->urb = urb;
 +	entry->dev = axdev;
 +	entry->length = length;
- 
--	mii_ethtool_get_link_ksettings(&dev->mii, cmd);
++
 +	ret = usb_autopm_get_interface_async(axdev->intf);
 +	if (ret < 0)
 +		goto drop;
  
--	return 0;
+-	mii_ethtool_get_link_ksettings(&dev->mii, cmd);
 +	usb_fill_bulk_urb (urb, axdev->udev, usb_sndbulkpipe(axdev->udev, 3),
 +			skb->data, skb->len, ax_lso_complete, skb);	
-+
+ 
+-	return 0;
 +	ret = usb_submit_urb(urb, GFP_ATOMIC);
 +	if (ret < 0)
 +		usb_autopm_put_interface_async(axdev->intf);
@@ -1659,16 +1647,16 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  {
 -	u16 tmp16;
 +	int ret;		
- 
--	tmp16 = GMII_PHY_PGSEL_PAGE3;
--	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
++
 +	/* The rx would be stopped, so skip submitting */
 +	if (test_bit(AX88179_UNPLUG, &dev->flags) ||
 +	    !test_bit(AX88179_ENABLE, &dev->flags) ||
 +	    !netif_carrier_ok(dev->netdev))
 +		return 0;
-+
+ 
+-	tmp16 = GMII_PHY_PGSEL_PAGE3;
+-	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
+-			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
 +	usb_fill_bulk_urb(desc->urb, dev->udev, usb_rcvbulkpipe(dev->udev, 2),
 +			  desc->head, AX88179_BUF_RX_SIZE,
 +			  (usb_complete_t)ax_read_bulk_callback, desc);
@@ -1715,13 +1703,16 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	int work_done;
 +	struct sk_buff		*skb;
 +	struct skb_data		*entry;
-+
-+	work_done = ax_rx_bottom(axdev, budget);
-+	ax_bottom_half(axdev);
  
 -	tmp16 = GMII_PHY_PGSEL_PAGE3;
 -	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
 -			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
++	work_done = ax_rx_bottom(axdev, budget);
++	ax_bottom_half(axdev);
+ 
+-	tmp16 = 0x3247;
+-	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
+-			  MII_PHYADDR, 2, &tmp16);
 +	/* Free LSO skb */
 +	while ((skb = skb_dequeue (&axdev->tx_lso_done)) != NULL) {			
 +		entry = (struct skb_data *) skb->cb;
@@ -1729,9 +1720,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		dev_kfree_skb (skb);		
 +	}
  
--	tmp16 = 0x3247;
+-	tmp16 = GMII_PHY_PGSEL_PAGE5;
 -	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			  MII_PHYADDR, 2, &tmp16);
+-			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
 +	if (work_done < budget) {
 +#if LINUX_VERSION_CODE < KERNEL_VERSION(4,10,0)
 +		napi_complete_done(napi, work_done);
@@ -1746,25 +1737,22 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +			napi_schedule(napi);
 +	}
  
--	tmp16 = GMII_PHY_PGSEL_PAGE5;
+-	tmp16 = 0x0680;
 -	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
+-			  MII_BMSR, 2, &tmp16);
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,10,0)
 +out:
 +#endif
 +	return work_done;
 +}
  
--	tmp16 = 0x0680;
--	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			  MII_BMSR, 2, &tmp16);
-+static int ax_poll(struct napi_struct *napi, int budget)
-+{
-+	struct ax_device *axdev = container_of(napi, struct ax_device, napi);
- 
 -	tmp16 = GMII_PHY_PGSEL_PAGE0;
 -	ax88179_write_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
 -			  GMII_PHY_PAGE_SELECT, 2, &tmp16);
++static int ax_poll(struct napi_struct *napi, int budget)
++{
++	struct ax_device *axdev = container_of(napi, struct ax_device, napi);
++
 +	return __ax_poll(axdev, budget);
  }
  
@@ -1778,18 +1766,18 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	struct net_device_stats *stats = ax_get_stats(dev->netdev);
 +	struct sk_buff_head skb_head, *tx_queue = &dev->tx_queue;
 +	struct sk_buff *skb;
-+
-+	if (skb_queue_empty(tx_queue))
-+		return;
  
 -	edata->eee_enabled = priv->eee_enabled;
 -	edata->eee_active = priv->eee_active;
++	if (skb_queue_empty(tx_queue))
++		return;
+ 
+-	return ax88179_ethtool_get_eee(dev, edata);
 +	__skb_queue_head_init(&skb_head);
 +	spin_lock_bh(&tx_queue->lock);
 +	skb_queue_splice_init(tx_queue, &skb_head);
 +	spin_unlock_bh(&tx_queue->lock);
- 
--	return ax88179_ethtool_get_eee(dev, edata);
++
 +	while ((skb = __skb_dequeue(&skb_head))) {
 +		dev_kfree_skb(skb);
 +		stats->tx_dropped++;
@@ -2166,14 +2154,16 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +				napi_enable(napi);
 +				netif_info(axdev, link, netdev, "link down\n");
 +		}
-+	}
+ 	}
 +}
 +
 +static inline void __ax_work_func(struct ax_device *dev)
 +{
 +	if (test_bit(AX88179_UNPLUG, &dev->flags) || !netif_running(dev->netdev))
 +		return;
-+
+ 
+-	/* max qlen depend on hard_mtu and rx_urb_size */
+-	usbnet_update_max_qlen(dev);
 +	if (usb_autopm_get_interface(dev->intf) < 0)
 +		return;
 +
@@ -2270,10 +2260,8 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		wolinfo->supported = 0;
 +		wolinfo->wolopts = 0;
 +		return;
- 	}
- 
--	/* max qlen depend on hard_mtu and rx_urb_size */
--	usbnet_update_max_qlen(dev);
++	}
++
 +	wolinfo->supported = WAKE_PHY | WAKE_MAGIC;
 +
 +	if (reg8 & AX_MONITOR_MODE_RWLC)
@@ -2378,7 +2366,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  	struct sockaddr *addr = p;
  	int ret;
  
-@@ -949,7 +1739,7 @@
+@@ -937,7 +1739,7 @@
  	if (!is_valid_ether_addr(addr->sa_data))
  		return -EADDRNOTAVAIL;
  
@@ -2387,7 +2375,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  
  	/* Set the MAC address */
  	ret = ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_NODE_ID, ETH_ALEN,
-@@ -958,75 +1748,66 @@
+@@ -946,75 +1748,66 @@
  		return ret;
  
  	return 0;
@@ -2452,12 +2440,12 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		} while (buf[0] & EEP_BUSY);
  
 -		} while (buf & EEP_BUSY);
+-
+-		__ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
+-				   2, 2, &eeprom[i * 2], 0);
 +		ax88179_read_cmd(axdev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
 +				 2, 2, &eeprom[i * 2], 0);
  
--		__ax88179_read_cmd(dev, AX_ACCESS_MAC, AX_SROM_DATA_LOW,
--				   2, 2, &eeprom[i * 2], 0);
--
 -		if ((i == 0) && (eeprom[0] == 0xFF))
 +		if ((i == 0) && (eeprom[0] == 0xFF)) 
  			return -EINVAL;
@@ -2494,7 +2482,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  		return -EINVAL;
  
  	for (i = 0; i < 64; i++)
-@@ -1035,24 +1816,36 @@
+@@ -1023,24 +1816,36 @@
  	while (csum > 255)
  		csum = (csum & 0x00FF) + ((csum >> 8) & 0x00FF);
  
@@ -2542,7 +2530,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
  	case 0xFF:
  		led = LED0_ACTIVE | LED1_LINK_10 | LED1_LINK_100 |
  		      LED1_LINK_1000 | LED2_ACTIVE | LED2_LINK_10 |
-@@ -1076,720 +1869,1012 @@
+@@ -1064,717 +1869,1012 @@
  		break;
  	}
  
@@ -2559,7 +2547,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	u16 tmp, ledact, ledlink, ledvalue = 0, delay = HZ / 10;
 -	unsigned long jtimeout;
 +	u16 reg16;
-+
+ 
+-	/* Check AX88179 version. UA1 or UA2*/
+-	ax88179_read_cmd(dev, AX_ACCESS_MAC, GENERAL_STATUS, 1, 1, &value);
 +	if (bGETH) {
 +		reg16 = 0x03;
 +		ax88179_write_cmd(axdev, AX_ACCESS_PHY, AX88179_PHY_ID,
@@ -2588,9 +2578,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +				  31, 2, &reg16);
 +	}
 +}
- 
--	/* Check AX88179 version. UA1 or UA2*/
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, GENERAL_STATUS, 1, 1, &value);
++
 +static int ax_LED_setting(struct ax_device *axdev)
 +{	
 +	u16 ledvalue = 0, delay = HZ / 10;
@@ -2946,13 +2934,6 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	       AX_MONITOR_MODE_RWMP;
 -	ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_MONITOR_MOD, 1, 1, tmp);
 +	return 0;
-+
-+}
-+
-+static int ax88179_open(struct net_device *netdev)
-+{
-+	struct ax_device *dev = netdev_priv(netdev);
-+	int res = 0;
  
 -	/* Configure default medium type => giga */
 -	*tmp16 = AX_MEDIUM_RECEIVE_EN | AX_MEDIUM_TXFLOW_CTRLEN |
@@ -2971,11 +2952,17 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	ax88179_ethtool_get_eee(dev, &eee_data);
 -	eee_data.advertised = 0;
 -	ax88179_ethtool_set_eee(dev, &eee_data);
++}
  
 -	/* Restart autoneg */
 -	mii_nway_restart(&dev->mii);
- 
--	usbnet_link_change(dev, 0, 0);
++static int ax88179_open(struct net_device *netdev)
++{
++	struct ax_device *dev = netdev_priv(netdev);
++	int res = 0;
++
++
++
 +	res = ax_alloc_buffer(dev);
 +	if (res) 
 +		goto out;	
@@ -3009,7 +2996,8 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +
 +	napi_enable(&dev->napi);
 +	netif_start_queue(netdev);
-+
+ 
+-	usbnet_link_change(dev, 0, 0);
 +	mutex_unlock(&dev->control);
 +
 +	usb_autopm_put_interface(dev->intf);
@@ -3135,9 +3123,13 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	}
  
 -	skb_trim(skb, skb->len - 4);
--	memcpy(&rx_hdr, skb_tail_pointer(skb), 4);
--	le32_to_cpus(&rx_hdr);
--
+-	rx_hdr = get_unaligned_le32(skb_tail_pointer(skb));
++#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 35)
++	mc_count = net->mc_count;
++#else
++	mc_count = netdev_mc_count(net);
++#endif
+ 
 -	pkt_cnt = (u16)rx_hdr;
 -	hdr_off = (u16)(rx_hdr >> 16);
 -	pkt_hdr = (u32 *)(skb->data + hdr_off);
@@ -3155,34 +3147,16 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -			pkt_hdr++;
 -			continue;
 -		}
-+#if LINUX_VERSION_CODE < KERNEL_VERSION(2, 6, 35)
-+	mc_count = net->mc_count;
-+#else
-+	mc_count = netdev_mc_count(net);
-+#endif
++	axdev->rxctl = (AX_RX_CTL_START | AX_RX_CTL_AB | AX_RX_CTL_IPE);
  
 -		if (pkt_cnt == 0) {
--			/* Skip IP alignment psudo header */
--			skb_pull(skb, 2);
 -			skb->len = pkt_len;
--			skb_set_tail_pointer(skb, pkt_len);
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(skb, 2);
+-			skb_set_tail_pointer(skb, skb->len);
 -			skb->truesize = pkt_len + sizeof(struct sk_buff);
 -			ax88179_rx_checksum(skb, pkt_hdr);
 -			return 1;
--		}
--
--		ax_skb = skb_clone(skb, GFP_ATOMIC);
--		if (ax_skb) {
--			ax_skb->len = pkt_len;
--			ax_skb->data = skb->data + 2;
--			skb_set_tail_pointer(ax_skb, pkt_len);
--			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
--			ax88179_rx_checksum(ax_skb, pkt_hdr);
--			usbnet_skb_return(dev, ax_skb);
--		} else {
--			return 0;
-+	axdev->rxctl = (AX_RX_CTL_START | AX_RX_CTL_AB | AX_RX_CTL_IPE);
-+
 +	if (net->flags & IFF_PROMISC) {
 +		axdev->rxctl |= AX_RX_CTL_PRO;
 +	} else if (net->flags & IFF_ALLMULTI
@@ -3212,6 +3186,18 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +				1 << (crc_bits & 7);
 +			mc_list = mc_list->next;
  		}
+-
+-		ax_skb = skb_clone(skb, GFP_ATOMIC);
+-		if (ax_skb) {
+-			ax_skb->len = pkt_len;
+-			/* Skip IP alignment pseudo header */
+-			skb_pull(ax_skb, 2);
+-			skb_set_tail_pointer(ax_skb, ax_skb->len);
+-			ax_skb->truesize = pkt_len + sizeof(struct sk_buff);
+-			ax88179_rx_checksum(ax_skb, pkt_hdr);
+-			usbnet_skb_return(dev, ax_skb);
+-		} else {
+-			return 0;
 +#else
 +		struct netdev_hw_addr *ha = NULL;
 +		memset(m_filter, 0, AX_MCAST_FILTER_SIZE);
@@ -3219,7 +3205,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +			crc_bits = ether_crc(ETH_ALEN, ha->addr) >> 26;
 +			*(m_filter + (crc_bits >> 3)) |=
 +				1 << (crc_bits & 7);
-+		}
+ 		}
 +#endif
 +		ax88179_write_cmd_async(axdev, AX_ACCESS_MAC,
 +					AX_MULTI_FILTER_ARRY,
@@ -3243,6 +3229,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -	int frame_size = dev->maxpacket;
 -	int mss = skb_shinfo(skb)->gso_size;
 -	int headroom;
+-	void *ptr;
 +static const struct net_device_ops ax88179_netdev_ops = {
 +	.ndo_open		= ax88179_open,
 +	.ndo_stop		= ax88179_close,
@@ -3295,9 +3282,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		}
  	}
  
--	skb_push(skb, 4);
--	cpu_to_le32s(&tx_hdr2);
--	skb_copy_to_linear_data(skb, &tx_hdr2, 4);
+-	ptr = skb_push(skb, 8);
+-	put_unaligned_le32(tx_hdr1, ptr);
+-	put_unaligned_le32(tx_hdr2, ptr + 4);
 +	if (!wflag) {
 +		if (ret < 0) {
 +			netdev_dbg(axdev->netdev,
@@ -3314,15 +3301,18 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +			return ret;		
 +	}
  
--	skb_push(skb, 4);
--	cpu_to_le32s(&tx_hdr1);
--	skb_copy_to_linear_data(skb, &tx_hdr1, 4);
-+	return 0;
-+}
- 
 -	return skb;
++	return 0;
+ }
+ 
+-static int ax88179_link_reset(struct usbnet *dev)
 +static int ax_check_ether_addr(struct ax_device *axdev)
-+{
+ {
+-	struct ax88179_data *ax179_data = (struct ax88179_data *)dev->data;
+-	u8 tmp[5], link_sts;
+-	u16 mode, tmp16, delay = HZ / 10;
+-	u32 tmp32 = 0x40000000;
+-	unsigned long jtimeout;
 +	unsigned char *tmp = (unsigned char*)axdev->netdev->dev_addr;
 +	u8 default_mac[6] = {0, 0x0e, 0xc6, 0x81, 0x79, 0x01};
 +	u8 default_mac_178a[6] = {0, 0x0e, 0xc6, 0x81, 0x78, 0x01};
@@ -3342,21 +3332,6 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		*(tmp + 1) = 0x0E;
 +		*(tmp + 2) = 0xC6;
 +		*(tmp + 3) = 0x8E;
-+
-+		return -EADDRNOTAVAIL;	
-+	} 
-+	return 0;
- }
- 
--static int ax88179_link_reset(struct usbnet *dev)
-+static int ax_get_mac(struct ax_device *axdev, u8* buf)
- {
--	struct ax88179_data *ax179_data = (struct ax88179_data *)dev->data;
--	u8 tmp[5], link_sts;
--	u16 mode, tmp16, delay = HZ / 10;
--	u32 tmp32 = 0x40000000;
--	unsigned long jtimeout;
-+	int ret, i;
  
 -	jtimeout = jiffies + delay;
 -	while (tmp32 & 0x40000000) {
@@ -3364,6 +3339,15 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2, &mode);
 -		ax88179_write_cmd(dev, AX_ACCESS_MAC, AX_RX_CTL, 2, 2,
 -				  &ax179_data->rxctl);
++		return -EADDRNOTAVAIL;	
++	} 
++	return 0;
++}
++
++static int ax_get_mac(struct ax_device *axdev, u8* buf)
++{
++	int ret, i;
++
 +	ret = ax_access_eeprom_mac(axdev, buf, 0x0, 0);
 +	if (ret < 0)
 +		goto out;
@@ -3375,11 +3359,13 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +				   "Failed to write MAC to EEPROM: %d", ret);
 +			goto out;
 +		}
-+
-+		msleep(5);
  
 -		/*link up, check the usb device control TX FIFO full or empty*/
 -		ax88179_read_cmd(dev, 0x81, 0x8c, 0, 4, &tmp32);
++		msleep(5);
+ 
+-		if (time_after(jiffies, jtimeout))
+-			return 0;
 +		ret = ax88179_read_cmd(axdev, AX_ACCESS_MAC, AX_NODE_ID,
 +				       ETH_ALEN, ETH_ALEN, buf, 0);
 +		if (ret < 0) {
@@ -3387,9 +3373,7 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +				   "Failed to read MAC address: %d", ret);
 +			goto out;
 +		}
- 
--		if (time_after(jiffies, jtimeout))
--			return 0;
++
 +		for (i = 0; i < ETH_ALEN; i++)
 +			if (*(axdev->netdev->dev_addr + i) != *((u8*)buf + i)) {
 +				netdev_warn(axdev->netdev,
@@ -3415,7 +3399,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +out:
 +	return ret;
 +}
-+
+ 
+-	ax88179_read_cmd(dev, AX_ACCESS_MAC, PHYSICAL_LINK_STATUS,
+-			 1, 1, &link_sts);
 +static int ax88179_probe(struct usb_interface *intf,
 +			 const struct usb_device_id *id)
 +{
@@ -3425,7 +3411,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	struct ax_device *axdev;
 +	u8 mac_addr[6] = {0};
 +	int ret;
-+
+ 
+-	ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
+-			 GMII_PHY_PHYSR, 2, &tmp16);
 +	netdev = alloc_etherdev(sizeof(struct ax_device));
 +	if (!netdev) {
 +		dev_err(&intf->dev, "Out of memory\n");
@@ -3434,8 +3422,12 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	
 +	axdev = netdev_priv(netdev);
  
--	ax88179_read_cmd(dev, AX_ACCESS_MAC, PHYSICAL_LINK_STATUS,
--			 1, 1, &link_sts);
+-	if (!(tmp16 & GMII_PHY_PHYSR_LINK)) {
+-		return 0;
+-	} else if (GMII_PHY_PHYSR_GIGA == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
+-		mode |= AX_MEDIUM_GIGAMODE | AX_MEDIUM_EN_125MHZ;
+-		if (dev->net->mtu > 1500)
+-			mode |= AX_MEDIUM_JUMBO_EN;
 +	netdev->watchdog_timeo = AX88179_TX_TIMEOUT;
 +	netdev->netdev_ops = &ax88179_netdev_ops;
 +	netdev->ethtool_ops = &ax88179_ethtool_ops;
@@ -3466,8 +3458,14 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +			   ADVERTISED_1000baseT_Full;
 +	intf->needs_remote_wakeup = 1;
  
--	ax88179_read_cmd(dev, AX_ACCESS_PHY, AX88179_PHY_ID,
--			 GMII_PHY_PHYSR, 2, &tmp16);
+-		if (link_sts & AX_USB_SS)
+-			memcpy(tmp, &AX88179_BULKIN_SIZE[0], 5);
+-		else if (link_sts & AX_USB_HS)
+-			memcpy(tmp, &AX88179_BULKIN_SIZE[1], 5);
+-		else
+-			memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
+-	} else if (GMII_PHY_PHYSR_100 == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
+-		mode |= AX_MEDIUM_PS;
 +	memset(mac_addr, 0, ETH_ALEN);
 +	ret = ax_get_mac(axdev, mac_addr);
 +	if (ret)
@@ -3488,12 +3486,12 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +		goto out1;
 +	}	
  
--	if (!(tmp16 & GMII_PHY_PHYSR_LINK)) {
--		return 0;
--	} else if (GMII_PHY_PHYSR_GIGA == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
--		mode |= AX_MEDIUM_GIGAMODE | AX_MEDIUM_EN_125MHZ;
--		if (dev->net->mtu > 1500)
--			mode |= AX_MEDIUM_JUMBO_EN;
+-		if (link_sts & (AX_USB_SS | AX_USB_HS))
+-			memcpy(tmp, &AX88179_BULKIN_SIZE[2], 5);
+-		else
+-			memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
+-	} else {
+-		memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
 +	 /* usb_enable_autosuspend(udev); */
 +	
 +	return 0;
@@ -3504,25 +3502,11 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 +	free_netdev(netdev);
 +	return ret;
 +}
- 
--		if (link_sts & AX_USB_SS)
--			memcpy(tmp, &AX88179_BULKIN_SIZE[0], 5);
--		else if (link_sts & AX_USB_HS)
--			memcpy(tmp, &AX88179_BULKIN_SIZE[1], 5);
--		else
--			memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
--	} else if (GMII_PHY_PHYSR_100 == (tmp16 & GMII_PHY_PHYSR_SMASK)) {
--		mode |= AX_MEDIUM_PS;
++
 +static void ax88179_disconnect(struct usb_interface *intf)
 +{
 +	struct ax_device *axdev = usb_get_intfdata(intf);
- 
--		if (link_sts & (AX_USB_SS | AX_USB_HS))
--			memcpy(tmp, &AX88179_BULKIN_SIZE[2], 5);
--		else
--			memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
--	} else {
--		memcpy(tmp, &AX88179_BULKIN_SIZE[3], 5);
++
 +	usb_set_intfdata(intf, NULL);
 +	if (axdev) {
 +		ax_set_unplug(axdev);
@@ -4065,9 +4049,9 @@ diff -Naur linux.org/drivers/net/usb/ax88179_178a.c linux.new/drivers/net/usb/ax
 -MODULE_LICENSE("GPL");
 +module_usb_driver(ax88179_driver);
 +/* End of Driver operations */
-diff -Naur linux.org/drivers/net/usb/ax88179_178a.h linux.new/drivers/net/usb/ax88179_178a.h
+diff --color -Naur linux.org/drivers/net/usb/ax88179_178a.h linux.new/drivers/net/usb/ax88179_178a.h
 --- linux.org/drivers/net/usb/ax88179_178a.h	1970-01-01 01:00:00.000000000 +0100
-+++ linux.new/drivers/net/usb/ax88179_178a.h	2020-02-11 14:31:12.590248329 +0100
++++ linux.new/drivers/net/usb/ax88179_178a.h	2020-07-20 09:20:26.474364523 +0200
 @@ -0,0 +1,435 @@
 +#ifndef	__LINUX_USBNET_ASIX_H
 +#define	__LINUX_USBNET_ASIX_H
