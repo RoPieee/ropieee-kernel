@@ -5,7 +5,7 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-pae
-_commit=fe915debc1925397f78db8bbfc9f488b0ce4e009
+_commit=cc39f1c9f82f6fe5a437836811d906c709e0661c
 _srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
@@ -14,7 +14,7 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.127
 real_pkgver=4.19.127
-pkgrel=3
+pkgrel=4
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -27,22 +27,20 @@ source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
         '60-linux.hook'
         '90-linux.hook'
         'kernel-usb-native-dsd-quirks.patch'
-	'kernel-alsa-support-for-384khz-sample-rates.patch'
-	'kernel-sound-pcm5102a-add-support-for-384k.patch'
+	'kernel-add-support-for-352k8-and-384k-sample-rates.patch'
 	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-rtl88x2bu-network-driver.patch'
 	'kernel-add-rtl8723bu-network-driver.patch')
-md5sums=('6ee780fbc817642656d7c935d46fc160'
+md5sums=('e50ae89fe2a3b3b03bf88384b7737bb4'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
          'db339c40effe188e8e18f78490ba2262'
-         'ec0778debc64a779fb674aa1231d5a58'
-         '0c7adc3f558065e2f2343b973830a51e'
+         '331ff20cb7dc6ab93edf30c340670e97'
          'e076cef466fd0f1798412d11bce4ce49'
          '2d7b6bd883af73a8987c58f20c591391'
          '65e0bee3cd6fe4e30d862d098173703e'
@@ -56,9 +54,8 @@ abort() {
 prepare() {
   cd "${srcdir}/${_srcname}"
 
-  msg2 "patching: 384k support"
-  patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
-  patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
+  msg2 "patching: 352k8 and 384k support"
+  patch -Np1 -i ../kernel-add-support-for-352k8-and-384k-sample-rates.patch
 
   msg2 "patching: kernel USB native DSD quirks"
   patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
