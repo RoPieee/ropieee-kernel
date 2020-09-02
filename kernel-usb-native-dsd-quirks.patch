@@ -1,11 +1,13 @@
-diff -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
---- linux.org/sound/usb/quirks.c	2020-06-15 15:35:18.780086715 +0200
-+++ linux.new/sound/usb/quirks.c	2020-06-15 15:38:48.297238870 +0200
-@@ -1400,6 +1400,7 @@
+diff --color -Naur linux.org/sound/usb/quirks.c linux.new/sound/usb/quirks.c
+--- linux.org/sound/usb/quirks.c	2020-07-17 09:56:46.000000000 +0200
++++ linux.new/sound/usb/quirks.c	2020-09-02 13:08:05.584680735 +0200
+@@ -1394,7 +1394,9 @@
+ 	case USB_ID(0x22e1, 0xca01): /* HDTA Serenade DSD */
+ 	case USB_ID(0x249c, 0x9326): /* M2Tech Young MkIII */
  	case USB_ID(0x2616, 0x0106): /* PS Audio NuWave DAC */
- 	case USB_ID(0x2622, 0x0002): /* QUAD Vena 2 */
++	case USB_ID(0x2622, 0x0002): /* QUAD Vena 2 */
  	case USB_ID(0x2622, 0x0041): /* Audiolab M-DAC+ */
 +	case USB_ID(0x278b, 0x5100): /* Rotel RC-1590 */
  	case USB_ID(0x27f7, 0x3002): /* W4S DAC-2v2SE */
  	case USB_ID(0x29a2, 0x0086): /* Mutec MC3+ USB */
- 	case USB_ID(0x3148, 0x0077): /* Cyrus QXR */
+ 	case USB_ID(0x6b42, 0x0042): /* MSB Technology */
