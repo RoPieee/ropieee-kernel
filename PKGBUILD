@@ -14,7 +14,7 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=4.19.127
 real_pkgver=4.19.127
-pkgrel=4
+pkgrel=5
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -39,7 +39,7 @@ md5sums=('e50ae89fe2a3b3b03bf88384b7737bb4'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
-         'db339c40effe188e8e18f78490ba2262'
+         '716543f0241ffa5fe647e5d033b7fea8'
          '331ff20cb7dc6ab93edf30c340670e97'
          'e076cef466fd0f1798412d11bce4ce49'
          '2d7b6bd883af73a8987c58f20c591391'
