@@ -5,44 +5,36 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-dsd
-_commit=cc39f1c9f82f6fe5a437836811d906c709e0661c
-_srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=4.19.127
-real_pkgver=4.19.127
-pkgrel=5
+pkgver=5.4.51
+real_pkgver=5.4.51
+pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=("https://github.com/raspberrypi/linux/archive/${_commit}.tar.gz"
+source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.4.y'
         'config.txt'
         'cmdline.txt'
         'linux.preset'
         '60-linux.hook'
         '90-linux.hook'
-        'kernel-usb-native-dsd-quirks.patch'
-	'kernel-add-support-for-352k8-and-384k-sample-rates.patch'
-	'kernel-drivers-net-usb-ax88179_178a.patch'
 	'kernel-add-rtl8812au-network-driver.patch'
 	'kernel-add-rtl8192eu-network-driver.patch'
 	'kernel-add-rtl88x2bu-network-driver.patch'
 	'kernel-add-rtl8723bu-network-driver.patch')
-md5sums=('e50ae89fe2a3b3b03bf88384b7737bb4'
+md5sums=('SKIP'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
          'ba6ee1d0a4c28fc35748013b4468c3d3'
-         '716543f0241ffa5fe647e5d033b7fea8'
-         '331ff20cb7dc6ab93edf30c340670e97'
-         'e076cef466fd0f1798412d11bce4ce49'
-         '2d7b6bd883af73a8987c58f20c591391'
+         'bb76dc68cdf27a33dbb1da9655fb862f'
          '65e0bee3cd6fe4e30d862d098173703e'
          'fd18c7692935226d48355ce49309f728'
          '492cacb9918f80bc5aeca152a4e04129')
@@ -52,16 +44,16 @@ abort() {
 }
 
 prepare() {
-  cd "${srcdir}/${_srcname}"
+  cd "${srcdir}/checkout"
 
-  msg2 "patching: 352k8 and 384k support"
-  patch -Np1 -i ../kernel-add-support-for-352k8-and-384k-sample-rates.patch
+  # msg2 "patching: 352k8 and 384k support"
+  # patch -Np1 -i ../kernel-add-support-for-352k8-and-384k-sample-rates.patch
 
-  msg2 "patching: kernel USB native DSD quirks"
-  patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
+  # msg2 "patching: kernel USB native DSD quirks"
+  # patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
 
-  msg2 "patching: kernel driver used by the Allo USBridge Signature"
-  patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
+  # msg2 "patching: kernel driver used by the Allo USBridge Signature"
+  # patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
 
   msg2 "Patching: add kernel driver RTL 8812AU"
   patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
@@ -84,7 +76,7 @@ prepare() {
 }
 
 build() {
-  cd "${srcdir}/${_srcname}"
+  cd "${srcdir}/checkout"
 
   # get kernel version
   #make prepare
@@ -126,7 +118,7 @@ _package() {
   backup=('boot/config.txt' 'boot/cmdline.txt')
   replaces=('linux-raspberrypi-latest')
 
-  cd "${srcdir}/${_srcname}"
+  cd "${srcdir}/checkout"
 
   KARCH=arm
 
@@ -190,7 +182,7 @@ _package-headers() {
 
   install -dm755 "${pkgdir}/usr/lib/modules/${_kernver}"
 
-  cd "${srcdir}/${_srcname}"
+  cd "${srcdir}/checkout"
   install -D -m644 Makefile \
     "${pkgdir}/usr/lib/modules/${_kernver}/build/Makefile"
   install -D -m644 kernel/Makefile \
