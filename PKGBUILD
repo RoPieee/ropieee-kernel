@@ -10,9 +10,9 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=5.4.51
-real_pkgver=5.4.51
-pkgrel=1
+pkgver=5.4.64
+real_pkgver=5.4.64
+pkgrel=3
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -55,11 +55,11 @@ prepare() {
   # msg2 "patching: kernel driver used by the Allo USBridge Signature"
   # patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
 
-  msg2 "Patching: add kernel driver RTL 8812AU"
-  patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
+  # msg2 "Patching: add kernel driver RTL 8812AU"
+  # patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
 
-  msg2 "Patching: add kernel driver RTL 8192EU"
-  patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
+  # msg2 "Patching: add kernel driver RTL 8192EU"
+  # patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
 
   msg2 "Patching: add kernel driver RTL 88x2BU"
   patch -Np1 -i ../kernel-add-rtl88x2bu-network-driver.patch
