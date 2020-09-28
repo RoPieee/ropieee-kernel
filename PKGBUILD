@@ -12,9 +12,9 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=5.4.61
-real_pkgver=5.4.61
-pkgrel=2
+pkgver=5.4.68
+real_pkgver=5.4.68
+pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
@@ -25,21 +25,13 @@ source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.4.y'
         'cmdline.txt'
         'linux.preset'
         '60-linux.hook'
-        '90-linux.hook'
-	'kernel-add-rtl8812au-network-driver.patch'
-	'kernel-add-rtl8192eu-network-driver.patch'
-	'kernel-add-rtl88x2bu-network-driver.patch'
-	'kernel-add-rtl8723bu-network-driver.patch')
+        '90-linux.hook')
 md5sums=('SKIP'
          '7c6b37a1353caccf6d3786bb4161c218'
          '7c09a9bcb2ad790100fb5e58b125c159'
          '86d4a35722b5410e3b29fc92dae15d4b'
          'ce6c81ad1ad1f8b333fd6077d47abdaf'
-         'ba6ee1d0a4c28fc35748013b4468c3d3'
-         'bb76dc68cdf27a33dbb1da9655fb862f'
-         '1786431a88827c765bf612fe8ff9c326'
-         'f8819268391e8941a0084f9a0c8e477f'
-         '492cacb9918f80bc5aeca152a4e04129')
+         'ba6ee1d0a4c28fc35748013b4468c3d3')
 abort() {
    msg2 "$1"
    exit 1
@@ -47,28 +39,6 @@ abort() {
 
 prepare() {
   cd "${srcdir}/checkout"
-
-#  msg2 "patching: 384k support"
-#  patch -Np1 -i ../kernel-alsa-support-for-384khz-sample-rates.patch
-#  patch -Np1 -i ../kernel-sound-pcm5102a-add-support-for-384k.patch
-
-#  msg2 "patching: kernel USB native DSD quirks"
-#  patch -Np1 -i ../kernel-usb-native-dsd-quirks.patch
-
-#  msg2 "patching: kernel driver used by the Allo USBridge Signature"
-#  patch -Np1 -i ../kernel-drivers-net-usb-ax88179_178a.patch
-
-  msg2 "Patching: add kernel driver RTL 8812AU"
-  patch -Np1 -i ../kernel-add-rtl8812au-network-driver.patch
-
-  msg2 "Patching: add kernel driver RTL 8192EU"
-  patch -Np1 -i ../kernel-add-rtl8192eu-network-driver.patch
-
-  msg2 "Patching: add kernel driver RTL 88x2BU"
-  patch -Np1 -i ../kernel-add-rtl88x2bu-network-driver.patch
-
-  msg2 "Patching: add kernel driver RTL 8723BU"
-  patch -Np1 -i ../kernel-add-rtl8723bu-network-driver.patch
 
   # add pkgrel to extraversion
   sed -ri "s|^(EXTRAVERSION =)(.*)|\1 \2-${pkgrel}|" Makefile
