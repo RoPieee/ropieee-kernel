@@ -5,15 +5,13 @@
 buildarch=20
 
 pkgbase=linux-raspberrypi-pae
-_commit=9d49ae69a1448f2180229b82794bfaa1c78679f7
-_srcname=linux-${_commit}
 _kernelname=${pkgbase#linux}
 _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=5.4.69
-real_pkgver=5.4.69
+pkgver=5.4.70
+real_pkgver=5.4.70
 pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
