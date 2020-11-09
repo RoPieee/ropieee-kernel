@@ -10,8 +10,8 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=5.4.74
-real_pkgver=5.4.74
+pkgver=5.4.75
+real_pkgver=5.4.75
 pkgrel=1
 arch=('armv6h' 'armv7h')
 url="http://www.kernel.org/"
