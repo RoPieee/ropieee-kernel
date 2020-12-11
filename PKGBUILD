@@ -12,13 +12,14 @@ _desc="Raspberry Pi"
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
 pkgver=5.4.81
 real_pkgver=5.4.81
-pkgrel=1
+pkgrel=3
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.4.y'
+#source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.4.y'
+source=('checkout::git://github.com/RoPieee/linux.git#branch=test_rtl8812au'
         'config.txt'
         'cmdline.txt'
         'linux.preset'
@@ -248,7 +249,7 @@ _package-headers() {
   rm -rf "${pkgdir}"/usr/lib/modules/${_kernver}/build/arch/{alpha,arc,arm26,arm64,avr32,blackfin,c6x,cris,frv,h8300,hexagon,ia64,m32r,m68k,m68knommu,metag,mips,microblaze,mn10300,openrisc,parisc,powerpc,ppc,s390,score,sh,sh64,sparc,sparc64,tile,unicore32,um,v850,x86,xtensa}
 }
 
-pkgname=("${pkgbase}" "${pkgbase}-headers")
+pkgname=("${pkgbase}")
 for _p in ${pkgname[@]}; do
   eval "package_${_p}() {
     _package${_p#${pkgbase}}
