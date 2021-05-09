@@ -10,17 +10,17 @@ _desc="Raspberry Pi"
 # the real_pkgver is the actual kernel version of the package
 # normally this should be the same as pkgver, but if we for some reason need to downgrade
 # we can do so by using a 'fake' pkgver of a higher kernel than is actually provided by the real_pkgver
-pkgver=5.10.17
-real_pkgver=5.10.17
+pkgver=5.10.35
+real_pkgver=5.10.35
 pkgrel=1
 arch=('armv7h')
 url="http://www.kernel.org/"
 license=('GPL2')
 makedepends=('xmlto' 'docbook-xsl' 'kmod' 'inetutils' 'bc' 'git')
 options=('!strip')
-#source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.10.y'
+source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.10.y'
 #source=('checkout::git://github.com/RoPieee/linux.git#branch=5.10.y-threadedirqs'
-source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.10-realteks'
+#source=('checkout::git://github.com/RoPieee/linux.git#branch=rpi-5.10-realteks'
         'config.txt'
         'cmdline.txt'
         'linux.preset'
